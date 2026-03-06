@@ -1,20 +1,11 @@
 "use client";
 
 import { motion } from "framer-motion";
-
-export type TrendCardData = {
-  id: string;
-  name: string;
-  score: number;
-  searchGrowth: number;
-  socialGrowth: number;
-  competition: "Low" | "Moderate" | "High";
-  insight: string;
-};
+import { TrendSignal } from "@/lib/types";
 
 type Props = {
-  trends: TrendCardData[];
-  onSelectTrend: (trend: TrendCardData) => void;
+  trends: TrendSignal[];
+  onSelectTrend: (trend: TrendSignal) => void;
 };
 
 export function TrendRadarDashboard({ trends, onSelectTrend }: Props) {
@@ -88,7 +79,7 @@ export function TrendRadarDashboard({ trends, onSelectTrend }: Props) {
             </div>
 
             <p className="relative mt-5 line-clamp-3 text-sm font-medium leading-relaxed text-slate-600">
-              {trend.insight}
+              {trend.opportunityInsight}
             </p>
 
             <div className="relative mt-6 flex items-center justify-between border-t border-slate-100 pt-4">
@@ -131,9 +122,9 @@ function MetricPill({
   );
 }
 
-function CompetitionPill({ level }: { level: TrendCardData["competition"] }) {
+function CompetitionPill({ level }: { level: TrendSignal["competition"] }) {
   const map: Record<
-    TrendCardData["competition"],
+    TrendSignal["competition"],
     { label: string; bg: string; dot: string; text: string }
   > = {
     Low: { label: "Low", bg: "bg-emerald-50 text-emerald-700", dot: "bg-emerald-500", text: "text-emerald-700" },
