@@ -53,9 +53,7 @@ export default function PageClient({
       fetchTrendSeries(trend.id),
       fetchOpportunityBrief(trend.id)
     ]);
-    if (nextSeries.length > 0) {
-      setSeries(nextSeries);
-    }
+    setSeries(nextSeries);
     setActiveBrief(brief);
     setModalOpen(true);
   };

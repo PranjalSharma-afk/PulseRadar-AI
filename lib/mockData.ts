@@ -116,6 +116,30 @@ export const mockTrendTimeSeries: Record<string, TrendTimepoint[]> = {
     { month: "Jul", searchInterest: 46, socialVolume: 33, contentCreation: 32 },
     { month: "Aug", searchInterest: 58, socialVolume: 42, contentCreation: 40 },
     { month: "Sep", searchInterest: 67, socialVolume: 53, contentCreation: 48 }
+  ],
+  "ashwagandha-latte": [
+    { month: "Apr", searchInterest: 41, socialVolume: 38, contentCreation: 35 },
+    { month: "May", searchInterest: 49, socialVolume: 45, contentCreation: 42 },
+    { month: "Jun", searchInterest: 58, socialVolume: 54, contentCreation: 50 },
+    { month: "Jul", searchInterest: 65, socialVolume: 62, contentCreation: 58 },
+    { month: "Aug", searchInterest: 72, socialVolume: 70, contentCreation: 66 },
+    { month: "Sep", searchInterest: 80, socialVolume: 79, contentCreation: 73 }
+  ],
+  "gaba-l-theanine": [
+    { month: "Apr", searchInterest: 14, socialVolume: 11, contentCreation: 9 },
+    { month: "May", searchInterest: 19, socialVolume: 15, contentCreation: 13 },
+    { month: "Jun", searchInterest: 26, socialVolume: 21, contentCreation: 18 },
+    { month: "Jul", searchInterest: 35, socialVolume: 28, contentCreation: 25 },
+    { month: "Aug", searchInterest: 48, socialVolume: 38, contentCreation: 34 },
+    { month: "Sep", searchInterest: 61, socialVolume: 50, contentCreation: 45 }
+  ],
+  "collagen-sachets": [
+    { month: "Apr", searchInterest: 55, socialVolume: 42, contentCreation: 50 },
+    { month: "May", searchInterest: 60, socialVolume: 47, contentCreation: 56 },
+    { month: "Jun", searchInterest: 65, socialVolume: 54, contentCreation: 63 },
+    { month: "Jul", searchInterest: 70, socialVolume: 61, contentCreation: 68 },
+    { month: "Aug", searchInterest: 75, socialVolume: 67, contentCreation: 73 },
+    { month: "Sep", searchInterest: 82, socialVolume: 74, contentCreation: 80 }
   ]
 };
 
