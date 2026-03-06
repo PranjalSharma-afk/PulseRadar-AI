@@ -37,8 +37,8 @@ export default async function HomePage() {
     mockTrendTimeSeries[initialTrend.id] ||
     [];
 
-  const initialBrief: OpportunityBrief | null =
-    (await fetchOpportunityBrief(initialTrend.id)) ?? null;
+  const initialBrief: OpportunityBrief | undefined =
+    (await fetchOpportunityBrief(initialTrend.id)) ?? undefined;
 
   return (
     <main className="relative min-h-screen text-slate-900">

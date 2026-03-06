@@ -14,13 +14,13 @@ import {
 const API_BASE =
   process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8000/api";
 
-async function safeFetch<T>(path: string): Promise<T | null> {
+async function safeFetch<T>(path: string): Promise<T | undefined> {
   try {
     const res = await fetch(`${API_BASE}${path}`, { cache: "no-store" });
-    if (!res.ok) return null;
+    if (!res.ok) return undefined;
     return (await res.json()) as T;
   } catch {
-    return null;
+    return undefined;
   }
 }
 
@@ -41,12 +41,12 @@ export async function fetchTrendSeries(
 
 export async function fetchOpportunityBrief(
   trendId: string
-): Promise<OpportunityBrief | null> {
+): Promise<OpportunityBrief | undefined> {
   const apiData = await safeFetch<OpportunityBrief>(
     `/opportunity-briefs/${trendId}`
   );
   if (apiData) return apiData;
-  return mockOpportunityBriefs.find((b) => b.trendId === trendId) ?? null;
+  return mockOpportunityBriefs.find((b) => b.trendId === trendId) ?? undefined;
 }
 
 export async function fetchPainPointInsights(): Promise<PainPointInsight[]> {

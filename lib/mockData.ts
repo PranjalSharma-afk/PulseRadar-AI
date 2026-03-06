@@ -175,6 +175,70 @@ export const mockOpportunityBriefs: OpportunityBrief[] = [
     estimatedMarketPotentialCr: 140,
     competitionDensity: "Moderate",
     timeToMainstreamMonths: 24
+  },
+  {
+    trendId: "moringa-gummies",
+    trendName: "Moringa Micronutrient Gummies",
+    productConcept:
+      "Daily moringa energy gummies packed with natural iron, vitamins, and antioxidants. Formulated for a fun, jitter-free energy boost.",
+    consumerProblem:
+      "Pill fatigue is real. Consumers want immunity and energy boosts but hate swallowing bitter powders or large multivitamins.",
+    marketEvidence: [
+      "Searches for moringa benefits up 98% this year.",
+      "Growing disdain for caffeine-driven vitality products on social media.",
+      "High demand for gummy formats in the wellness category."
+    ],
+    estimatedMarketPotentialCr: 95,
+    competitionDensity: "Low",
+    timeToMainstreamMonths: 16
+  },
+  {
+    trendId: "ashwagandha-latte",
+    trendName: "Ashwagandha Evening Lattes",
+    productConcept:
+      "A soothing ashwagandha-infused milk blend designed to be mixed hot before bed, promoting relaxation and stress relief.",
+    consumerProblem:
+      "People struggle to wind down after stressful work days, but don't want clinical sleep aids or pills.",
+    marketEvidence: [
+      "Consistent 76% growth in searches for ashwagandha evening routines.",
+      "Rising trend of 'moon milk' aesthetics on Instagram and TikTok.",
+      "Whitespace in the calming hot beverage segment."
+    ],
+    estimatedMarketPotentialCr: 130,
+    competitionDensity: "Moderate",
+    timeToMainstreamMonths: 14
+  },
+  {
+    trendId: "gaba-l-theanine",
+    trendName: "GABA + L-Theanine Focus Chews",
+    productConcept:
+      "Bite-sized focus chews pairing GABA and L-Theanine to promote a calm, alert state of mind during deep work sessions.",
+    consumerProblem:
+      "Professionals need focus to work efficiently, but coffee causes jitters and anxiety.",
+    marketEvidence: [
+      "88% search growth for non-caffeine focus alternatives.",
+      "L-theanine mentions doubling on productivity forums and communities.",
+      "Premium positioning opportunity for office-friendly wellness snacks."
+    ],
+    estimatedMarketPotentialCr: 110,
+    competitionDensity: "Moderate",
+    timeToMainstreamMonths: 20
+  },
+  {
+    trendId: "collagen-sachets",
+    trendName: "Collagen + Hyaluronic Sachets",
+    productConcept:
+      "Single-serve, unflavored collagen and hyaluronic acid sachets that dissolve instantly in morning coffee or smoothies.",
+    consumerProblem:
+      "Consumers know collagen is good for skin and joints, but bulky tubs are messy and hard to travel with.",
+    marketEvidence: [
+      "Collagen queries dominate the beauty ingestibles category.",
+      "Demand for easy, on-the-go wellness formats is strongly rising.",
+      "Sachets allow premium trial without high upfront tub commitments."
+    ],
+    estimatedMarketPotentialCr: 260,
+    competitionDensity: "High",
+    timeToMainstreamMonths: 10
   }
 ];
 

@@ -7,7 +7,7 @@ import { useEffect } from "react";
 type Props = {
   open: boolean;
   trend: TrendSignal | null;
-  brief: OpportunityBrief | null;
+  brief: OpportunityBrief | undefined;
   onClose: () => void;
 };
 
@@ -23,12 +23,13 @@ export function OpportunityBriefModal({ open, trend, brief, onClose }: Props) {
 
   return (
     <AnimatePresence>
-      {open && trend && brief && (
+      {open && trend && (
         <motion.div
           className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 backdrop-blur-sm p-4"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
+          onClick={onClose}
         >
           <motion.div
             className="relative max-h-[90vh] w-full max-w-4xl overflow-hidden rounded-[2rem] border-2 border-black bg-white shadow-2xl flex flex-col"
@@ -36,6 +37,7 @@ export function OpportunityBriefModal({ open, trend, brief, onClose }: Props) {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.95 }}
             transition={{ type: "spring", stiffness: 200, damping: 25 }}
+            onClick={(e) => e.stopPropagation()}
           >
             <header className="flex items-center justify-between gap-4 border-b-2 border-slate-100 bg-white px-8 py-6 shrink-0 z-10">
               <div>
@@ -62,108 +64,117 @@ export function OpportunityBriefModal({ open, trend, brief, onClose }: Props) {
             </header>
 
             <div className="flex-1 overflow-y-auto p-8 text-sm text-slate-600">
-              <section className="grid gap-8 lg:grid-cols-[1.6fr,1fr] mb-10">
-                <div className="space-y-4">
-                  <h4 className="text-[11px] font-black uppercase tracking-widest text-slate-400">
-                    Product Concept
-                  </h4>
-                  <p className="text-lg font-medium leading-relaxed text-black">
-                    {brief.productConcept}
-                  </p>
-                </div>
-                <div className="space-y-4 rounded-2xl border-2 border-slate-100 bg-slate-50 p-6">
-                  <h4 className="text-[11px] font-black uppercase tracking-widest text-slate-400">
-                    Snapshot
-                  </h4>
-                  <dl className="space-y-4">
-                    <div className="flex items-center justify-between gap-4 border-b border-slate-200 pb-3">
-                      <dt className="text-xs font-bold text-slate-500">
-                        Estimated Market
-                      </dt>
-                      <dd className="text-sm font-black text-black">
-                        ~₹{brief.estimatedMarketPotentialCr}Cr
-                      </dd>
+              {brief ? (
+                <>
+                  <section className="grid gap-8 lg:grid-cols-[1.6fr,1fr] mb-10">
+                    <div className="space-y-4">
+                      <h4 className="text-[11px] font-black uppercase tracking-widest text-slate-400">
+                        Product Concept
+                      </h4>
+                      <p className="text-lg font-medium leading-relaxed text-black">
+                        {brief.productConcept}
+                      </p>
                     </div>
-                    <div className="flex items-center justify-between gap-4 border-b border-slate-200 pb-3">
-                      <dt className="text-xs font-bold text-slate-500">
-                        Competition Density
-                      </dt>
-                      <dd className="text-sm font-black text-black">
-                        {brief.competitionDensity}
-                      </dd>
+                    <div className="space-y-4 rounded-2xl border-2 border-slate-100 bg-slate-50 p-6">
+                      <h4 className="text-[11px] font-black uppercase tracking-widest text-slate-400">
+                        Snapshot
+                      </h4>
+                      <dl className="space-y-4">
+                        <div className="flex items-center justify-between gap-4 border-b border-slate-200 pb-3">
+                          <dt className="text-xs font-bold text-slate-500">
+                            Estimated Market
+                          </dt>
+                          <dd className="text-sm font-black text-black">
+                            ~₹{brief.estimatedMarketPotentialCr}Cr
+                          </dd>
+                        </div>
+                        <div className="flex items-center justify-between gap-4 border-b border-slate-200 pb-3">
+                          <dt className="text-xs font-bold text-slate-500">
+                            Competition Density
+                          </dt>
+                          <dd className="text-sm font-black text-black">
+                            {brief.competitionDensity}
+                          </dd>
+                        </div>
+                        <div className="flex items-center justify-between gap-4">
+                          <dt className="text-xs font-bold text-slate-500">
+                            Time to Mainstream
+                          </dt>
+                          <dd className="text-sm font-black text-black">
+                            {brief.timeToMainstreamMonths}–{brief.timeToMainstreamMonths + 6} months
+                          </dd>
+                        </div>
+                      </dl>
                     </div>
-                    <div className="flex items-center justify-between gap-4">
-                      <dt className="text-xs font-bold text-slate-500">
-                        Time to Mainstream
-                      </dt>
-                      <dd className="text-sm font-black text-black">
-                        {brief.timeToMainstreamMonths}–{brief.timeToMainstreamMonths + 6} months
-                      </dd>
-                    </div>
-                  </dl>
-                </div>
-              </section>
+                  </section>
 
-              <section className="grid gap-8 lg:grid-cols-2 mb-10">
-                <div className="space-y-4">
-                  <h4 className="text-[11px] font-black uppercase tracking-widest text-slate-400">
-                    Consumer Problem
-                  </h4>
-                  <p className="text-base font-medium leading-relaxed text-slate-600">
-                    {brief.consumerProblem}
-                  </p>
-                </div>
-                <div className="space-y-4">
-                  <h4 className="text-[11px] font-black uppercase tracking-widest text-slate-400">
-                    Market Evidence
-                  </h4>
-                  <ul className="space-y-3 text-sm font-semibold text-slate-700">
-                    {brief.marketEvidence.map((item, index) => (
-                      <li key={index} className="flex gap-3 items-start">
-                        <span className="mt-1.5 shrink-0 h-2 w-2 rounded-full bg-black" />
-                        <span className="leading-snug">{item}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </section>
+                  <section className="grid gap-8 lg:grid-cols-2 mb-10">
+                    <div className="space-y-4">
+                      <h4 className="text-[11px] font-black uppercase tracking-widest text-slate-400">
+                        Consumer Problem
+                      </h4>
+                      <p className="text-base font-medium leading-relaxed text-slate-600">
+                        {brief.consumerProblem}
+                      </p>
+                    </div>
+                    <div className="space-y-4">
+                      <h4 className="text-[11px] font-black uppercase tracking-widest text-slate-400">
+                        Market Evidence
+                      </h4>
+                      <ul className="space-y-3 text-sm font-semibold text-slate-700">
+                        {brief.marketEvidence?.map((item, index) => (
+                          <li key={index} className="flex gap-3 items-start">
+                            <span className="mt-1.5 shrink-0 h-2 w-2 rounded-full bg-black" />
+                            <span className="leading-snug">{item}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </section>
 
-              <section className="grid gap-6 sm:grid-cols-3 rounded-2xl border border-slate-100 bg-slate-50 p-6">
-                <div className="space-y-3">
-                  <h4 className="text-[10px] font-black uppercase tracking-widest text-slate-400">
-                    Search Velocity
-                  </h4>
-                  <ProgressBar
-                    value={Math.min(100, trend.searchGrowth / 2)}
-                    tone="sky"
-                    helper={`${trend.searchGrowth.toFixed(1)}% 6m growth`}
-                  />
+                  <section className="grid gap-6 sm:grid-cols-3 rounded-2xl border border-slate-100 bg-slate-50 p-6">
+                    <div className="space-y-3">
+                      <h4 className="text-[10px] font-black uppercase tracking-widest text-slate-400">
+                        Search Velocity
+                      </h4>
+                      <ProgressBar
+                        value={Math.min(100, trend.searchGrowth / 2)}
+                        tone="sky"
+                        helper={`${trend.searchGrowth.toFixed(1)}% 6m growth`}
+                      />
+                    </div>
+                    <div className="space-y-3">
+                      <h4 className="text-[10px] font-black uppercase tracking-widest text-slate-400">
+                        Conversation Momentum
+                      </h4>
+                      <ProgressBar
+                        value={Math.min(100, trend.socialGrowth / 2)}
+                        tone="fuchsia"
+                        helper={`${trend.socialGrowth.toFixed(1)}% social lift`}
+                      />
+                    </div>
+                    <div className="space-y-3">
+                      <h4 className="text-[10px] font-black uppercase tracking-widest text-slate-400">
+                        Demand Gap
+                      </h4>
+                      <ProgressBar
+                        value={trend.competition === "Low" ? 92 : 68}
+                        tone="emerald"
+                        helper={
+                          trend.competition === "Low"
+                            ? "Category white space"
+                            : "Selective white spaces"
+                        }
+                      />
+                    </div>
+                  </section>
+                </>
+              ) : (
+                <div className="flex flex-col items-center justify-center py-20 text-slate-400">
+                  <div className="h-8 w-8 animate-spin rounded-full border-4 border-slate-200 border-t-black mb-4" />
+                  <p className="text-sm font-bold">Loading brief data…</p>
                 </div>
-                <div className="space-y-3">
-                  <h4 className="text-[10px] font-black uppercase tracking-widest text-slate-400">
-                    Conversation Momentum
-                  </h4>
-                  <ProgressBar
-                    value={Math.min(100, trend.socialGrowth / 2)}
-                    tone="fuchsia"
-                    helper={`${trend.socialGrowth.toFixed(1)}% social lift`}
-                  />
-                </div>
-                <div className="space-y-3">
-                  <h4 className="text-[10px] font-black uppercase tracking-widest text-slate-400">
-                    Demand Gap
-                  </h4>
-                  <ProgressBar
-                    value={trend.competition === "Low" ? 92 : 68}
-                    tone="emerald"
-                    helper={
-                      trend.competition === "Low"
-                        ? "Category white space"
-                        : "Selective white spaces"
-                    }
-                  />
-                </div>
-              </section>
+              )}
             </div>
           </motion.div>
         </motion.div>

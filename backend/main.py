@@ -186,6 +186,30 @@ TREND_SERIES: dict[str, List[TrendTimepoint]] = {
     TrendTimepoint(month="Aug", searchInterest=58, socialVolume=42, contentCreation=40),
     TrendTimepoint(month="Sep", searchInterest=67, socialVolume=53, contentCreation=48),
   ],
+  "ashwagandha-latte": [
+    TrendTimepoint(month="Apr", searchInterest=41, socialVolume=38, contentCreation=35),
+    TrendTimepoint(month="May", searchInterest=49, socialVolume=45, contentCreation=42),
+    TrendTimepoint(month="Jun", searchInterest=58, socialVolume=54, contentCreation=50),
+    TrendTimepoint(month="Jul", searchInterest=65, socialVolume=62, contentCreation=58),
+    TrendTimepoint(month="Aug", searchInterest=72, socialVolume=70, contentCreation=66),
+    TrendTimepoint(month="Sep", searchInterest=80, socialVolume=79, contentCreation=73),
+  ],
+  "gaba-l-theanine": [
+    TrendTimepoint(month="Apr", searchInterest=14, socialVolume=11, contentCreation=9),
+    TrendTimepoint(month="May", searchInterest=19, socialVolume=15, contentCreation=13),
+    TrendTimepoint(month="Jun", searchInterest=26, socialVolume=21, contentCreation=18),
+    TrendTimepoint(month="Jul", searchInterest=35, socialVolume=28, contentCreation=25),
+    TrendTimepoint(month="Aug", searchInterest=48, socialVolume=38, contentCreation=34),
+    TrendTimepoint(month="Sep", searchInterest=61, socialVolume=50, contentCreation=45),
+  ],
+  "collagen-sachets": [
+    TrendTimepoint(month="Apr", searchInterest=55, socialVolume=42, contentCreation=50),
+    TrendTimepoint(month="May", searchInterest=60, socialVolume=47, contentCreation=56),
+    TrendTimepoint(month="Jun", searchInterest=65, socialVolume=54, contentCreation=63),
+    TrendTimepoint(month="Jul", searchInterest=70, socialVolume=61, contentCreation=68),
+    TrendTimepoint(month="Aug", searchInterest=75, socialVolume=67, contentCreation=73),
+    TrendTimepoint(month="Sep", searchInterest=82, socialVolume=74, contentCreation=80),
+  ],
 }
 
 
@@ -229,6 +253,83 @@ OPPORTUNITY_BRIEFS: List[OpportunityBrief] = [
     estimatedMarketPotentialCr=140,
     competitionDensity="Moderate",
     timeToMainstreamMonths=24,
+  ),
+  OpportunityBrief(
+    trendId="moringa-gummies",
+    trendName="Moringa Micronutrient Gummies",
+    productConcept=(
+      "Daily moringa energy gummies packed with natural iron, vitamins, and antioxidants. "
+      "Formulated for a fun, jitter-free energy boost."
+    ),
+    consumerProblem=(
+      "Pill fatigue is real. Consumers want immunity and energy boosts but hate swallowing "
+      "bitter powders or large multivitamins."
+    ),
+    marketEvidence=[
+      "Searches for moringa benefits up 98% this year.",
+      "Growing disdain for caffeine-driven vitality products on social media.",
+      "High demand for gummy formats in the wellness category.",
+    ],
+    estimatedMarketPotentialCr=95,
+    competitionDensity="Low",
+    timeToMainstreamMonths=16,
+  ),
+  OpportunityBrief(
+    trendId="ashwagandha-latte",
+    trendName="Ashwagandha Evening Lattes",
+    productConcept=(
+      "A soothing ashwagandha-infused milk blend designed to be mixed hot before bed, "
+      "promoting relaxation and stress relief."
+    ),
+    consumerProblem=(
+      "People struggle to wind down after stressful work days, but don't want clinical sleep aids or pills."
+    ),
+    marketEvidence=[
+      "Consistent 76% growth in searches for ashwagandha evening routines.",
+      "Rising trend of 'moon milk' aesthetics on Instagram and TikTok.",
+      "Whitespace in the calming hot beverage segment.",
+    ],
+    estimatedMarketPotentialCr=130,
+    competitionDensity="Moderate",
+    timeToMainstreamMonths=14,
+  ),
+  OpportunityBrief(
+    trendId="gaba-l-theanine",
+    trendName="GABA + L-Theanine Focus Chews",
+    productConcept=(
+      "Bite-sized focus chews pairing GABA and L-Theanine to promote a calm, alert state "
+      "of mind during deep work sessions."
+    ),
+    consumerProblem=(
+      "Professionals need focus to work efficiently, but coffee causes jitters and anxiety."
+    ),
+    marketEvidence=[
+      "88% search growth for non-caffeine focus alternatives.",
+      "L-theanine mentions doubling on productivity forums and communities.",
+      "Premium positioning opportunity for office-friendly wellness snacks.",
+    ],
+    estimatedMarketPotentialCr=110,
+    competitionDensity="Moderate",
+    timeToMainstreamMonths=20,
+  ),
+  OpportunityBrief(
+    trendId="collagen-sachets",
+    trendName="Collagen + Hyaluronic Sachets",
+    productConcept=(
+      "Single-serve, unflavored collagen and hyaluronic acid sachets that dissolve instantly "
+      "in morning coffee or smoothies."
+    ),
+    consumerProblem=(
+      "Consumers know collagen is good for skin and joints, but bulky tubs are messy and hard to travel with."
+    ),
+    marketEvidence=[
+      "Collagen queries dominate the beauty ingestibles category.",
+      "Demand for easy, on-the-go wellness formats is strongly rising.",
+      "Sachets allow premium trial without high upfront tub commitments.",
+    ],
+    estimatedMarketPotentialCr=260,
+    competitionDensity="High",
+    timeToMainstreamMonths=10,
   ),
 ]
 

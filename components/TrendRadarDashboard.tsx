@@ -34,16 +34,26 @@ export function TrendRadarDashboard({ trends, onSelectTrend }: Props) {
 
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         {trends.map((trend, index) => (
-          <motion.button
+          <motion.div
             key={trend.id}
-            onClick={() => onSelectTrend(trend)}
-            className="group relative flex flex-col items-stretch rounded-2xl border-2 border-slate-100 bg-white p-6 text-left shadow-md transition-all duration-300 hover:border-black hover:shadow-2xl"
+            className="flex"
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
-            whileHover={{ y: -6, scale: 1.01 }}
             viewport={{ once: true, margin: "-50px" }}
             transition={{ delay: 0.05 * index, duration: 0.4 }}
           >
+            <motion.button
+              onClick={() => onSelectTrend(trend)}
+              className="group relative flex w-full flex-col h-full items-stretch rounded-2xl border-2 border-slate-100 bg-white p-6 text-left shadow-md transition-all duration-300 hover:border-black hover:shadow-2xl"
+              animate={{ y: [0, -8, 0] }}
+              transition={{
+                duration: 4,
+                repeat: Infinity,
+                ease: "easeInOut",
+                delay: index * 0.2
+              }}
+              whileHover={{ scale: 1.02 }}
+            >
             <div className="absolute inset-0 rounded-2xl bg-slate-50/0 transition-colors group-hover:bg-slate-50/40" />
 
             {/* Title Row */}
@@ -88,7 +98,7 @@ export function TrendRadarDashboard({ trends, onSelectTrend }: Props) {
             </p>
 
             {/* Footer */}
-            <div className="relative mt-6 flex items-center justify-between border-t border-slate-100 pt-4">
+            <div className="relative flex w-full mt-auto items-center justify-between border-t border-slate-100 pt-4">
               <div className="flex items-center gap-2 text-[11px] font-bold text-slate-500">
                 <span className="h-2 w-2 rounded-full bg-emerald-500" />
                 AI brief available
@@ -98,6 +108,7 @@ export function TrendRadarDashboard({ trends, onSelectTrend }: Props) {
               </span>
             </div>
           </motion.button>
+          </motion.div>
         ))}
       </div>
     </section>

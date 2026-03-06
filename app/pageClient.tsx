@@ -21,7 +21,7 @@ type Props = {
   initialPainPoints: PainPointInsight[];
   initialSeries: TrendTimepoint[];
   initialTrend: TrendSignal;
-  initialBrief: OpportunityBrief | null;
+  initialBrief: OpportunityBrief | undefined;
 };
 
 export default function PageClient({
@@ -35,7 +35,7 @@ export default function PageClient({
   const [selectedTrend, setSelectedTrend] = useState<TrendSignal>(initialTrend);
   const [series, setSeries] = useState<TrendTimepoint[]>(initialSeries);
   const [modalOpen, setModalOpen] = useState(false);
-  const [activeBrief, setActiveBrief] = useState<OpportunityBrief | null>(
+  const [activeBrief, setActiveBrief] = useState<OpportunityBrief | undefined>(
     initialBrief
   );
 
@@ -48,14 +48,20 @@ export default function PageClient({
   }, []);
 
   const handleSelectTrend = async (trend: TrendSignal) => {
+    console.log("Clicked trend:", trend.id);
     setSelectedTrend(trend);
-    const [nextSeries, brief] = await Promise.all([
-      fetchTrendSeries(trend.id),
-      fetchOpportunityBrief(trend.id)
-    ]);
-    setSeries(nextSeries);
-    setActiveBrief(brief);
-    setModalOpen(true);
+    try {
+      const [nextSeries, brief] = await Promise.all([
+        fetchTrendSeries(trend.id),
+        fetchOpportunityBrief(trend.id)
+      ]);
+      console.log("Fetched series:", nextSeries?.length, "brief:", !!brief);
+      setSeries(nextSeries);
+      setActiveBrief(brief);
+      setModalOpen(true);
+    } catch (err) {
+      console.error("Error setting trend data:", err);
+    }
   };
 
   const scrollToRadar = () => {
@@ -129,7 +135,7 @@ export default function PageClient({
       <OpportunityBriefModal
         open={modalOpen}
         trend={selectedTrend}
-        brief={activeBrief}
+        brief={activeBrief ?? undefined}
         onClose={() => setModalOpen(false)}
       />
     </>
