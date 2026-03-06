@@ -9,6 +9,9 @@ import { TrendScoringFramework } from "@/components/TrendScoringFramework";
 import { TrendSignalGraph } from "@/components/TrendSignalGraph";
 import { FounderInsightPanel } from "@/components/FounderInsightPanel";
 import { DataSourcesSection } from "@/components/DataSourcesSection";
+import { AboutSection } from "@/components/AboutSection";
+import { HowItWorksSection } from "@/components/HowItWorksSection";
+import { ContactSection } from "@/components/ContactSection";
 import {
   fetchOpportunityBrief,
   fetchTrendSeries
@@ -96,41 +99,13 @@ export default function PageClient({
 
       <FounderInsightPanel />
 
-      <section id="about" className="mx-auto max-w-6xl px-6 pb-4 pt-2">
-        <p className="text-[11px] text-slate-500">
-          PulseRadar AI uses simulated, anonymised data in this demo. The
-          production version will plug into live Indian wellness signals across
-          multiple channels.
-        </p>
-      </section>
+      <AboutSection />
 
       <DataSourcesSection />
 
-      <section
-        id="how-it-works"
-        className="mx-auto max-w-6xl px-6 pb-8 pt-4 text-[11px] text-slate-400"
-      >
-        <p>
-          Behind the scenes, PulseRadar AI aggregates search trends, public
-          reviews, social conversations, and content creation patterns to score
-          wellness opportunities. The backend API is designed to plug into
-          real-time data providers as you scale.
-        </p>
-      </section>
+      <HowItWorksSection />
 
-      <section
-        id="contact"
-        className="mx-auto max-w-6xl px-6 pb-10 text-sm font-medium text-slate-500"
-      >
-        <p>
-          Interested in partnering or piloting PulseRadar AI for your CPG or
-          wellness brand? Reach out at{" "}
-          <a href="mailto:Pranjalsudan0987@gmail.com" className="font-black text-black hover:underline">
-            Pranjalsudan0987@gmail.com
-          </a>
-          .
-        </p>
-      </section>
+      <ContactSection />
 
       <OpportunityBriefModal
         open={modalOpen}
