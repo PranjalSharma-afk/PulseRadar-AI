@@ -94,23 +94,27 @@ export function HowItWorksSection() {
         <p className="mb-6 text-xs font-black uppercase tracking-widest text-slate-400">
           Signal Architecture
         </p>
-        <div className="flex flex-wrap items-center justify-between gap-4 text-center">
+        <div className="grid grid-cols-[1fr,auto,1fr,auto,1fr] items-start gap-4">
           {[
             { label: "Data Sources", items: ["Google Trends", "Reddit", "YouTube", "Amazon", "Pub Research"] },
             { label: "Processing Layer", items: ["Normalisation", "Geo Filtering", "Deduplication", "Trend Scoring", "LLM Synthesis"] },
             { label: "Output", items: ["Trend Scores", "Briefs", "Leaderboard", "Pain Points", "Market Sizing"] }
           ].map((col, ci) => (
-            <div key={col.label} className="flex flex-col gap-3 flex-1 min-w-[140px]">
-              <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">{col.label}</p>
-              {col.items.map((item) => (
-                <span key={item} className="inline-block rounded-lg border border-slate-700 bg-slate-800 px-3 py-2 text-xs font-bold text-slate-300">
-                  {item}
-                </span>
-              ))}
+            <>
+              <div key={col.label} className="flex flex-col gap-3 text-center">
+                <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">{col.label}</p>
+                {col.items.map((item) => (
+                  <span key={item} className="inline-block w-full rounded-lg border border-slate-700 bg-slate-800 px-3 py-2 text-xs font-bold text-slate-300">
+                    {item}
+                  </span>
+                ))}
+              </div>
               {ci < 2 && (
-                <span className="hidden text-slate-600 lg:block text-xl text-center">→</span>
+                <div key={`arrow-${ci}`} className="flex items-center justify-center pt-7">
+                  <span className="text-xl font-black text-slate-600">→</span>
+                </div>
               )}
-            </div>
+            </>
           ))}
         </div>
       </div>
