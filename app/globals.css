@@ -1,0 +1,44 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+}
+
+body {
+  @apply bg-background text-slate-900 antialiased font-sans selection:bg-black selection:text-white;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-slate-50;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-slate-300 rounded-full;
+}
+
+.radar-grid {
+  /* Minimal structural lines */
+  background-image: linear-gradient(to right, rgba(0, 0, 0, 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(0, 0, 0, 0.05) 1px, transparent 1px);
+  background-size: 64px 64px;
+}
+
+.card-elevated {
+  @apply bg-white border border-slate-200 shadow-soft backdrop-blur-md rounded-2xl;
+}
+
+.badge-soft {
+  @apply inline-flex items-center rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-xs font-bold text-slate-900 uppercase tracking-widest;
+}
+
+.pill {
+  @apply inline-flex items-center rounded-full bg-white px-3 py-1.5 text-xs font-bold text-slate-900 ring-1 ring-slate-200 shadow-sm transition-all hover:bg-slate-50 hover:shadow-md;
+}
+
