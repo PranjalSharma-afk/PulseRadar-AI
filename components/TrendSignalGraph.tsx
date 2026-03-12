@@ -18,21 +18,16 @@ type Props = {
 export function TrendSignalGraph({ selectedTrend, series }: Props) {
   return (
     <section className="mx-auto max-w-6xl px-6 pb-20 pt-10 md:pt-16">
-      <div className="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-6">
-        <div>
-          <h2 className="text-3xl font-extrabold tracking-tight text-black md:text-4xl">
-            Trend Intelligence Graph
-          </h2>
-          <p className="mt-2 text-sm font-medium text-slate-500 md:text-base">
-            Search interest, social conversation volume, and content creation
-            growth over time for{" "}
-            <span className="font-bold text-black">
-              {selectedTrend.name}
-            </span>
-            .
-          </p>
-        </div>
-        <div className="flex flex-wrap items-center gap-3 text-[10px] text-slate-500 md:text-xs">
+      <div className="mb-10 text-center">
+        <h2 className="text-3xl font-extrabold tracking-tight text-black md:text-4xl">
+          Trend Intelligence Graph
+        </h2>
+        <p className="mt-2 text-sm font-medium text-slate-500 md:text-base">
+          Search interest, social conversation volume, and content creation
+          growth over time for{" "}
+          <span className="font-bold text-black">{selectedTrend.name}</span>.
+        </p>
+        <div className="mt-4 flex flex-wrap items-center justify-center gap-3">
           <LegendPill colorClass="bg-sky-500" textClass="text-sky-700" label="Search interest" bgClass="bg-sky-50 border border-sky-100" />
           <LegendPill colorClass="bg-fuchsia-500" textClass="text-fuchsia-700" label="Social conversations" bgClass="bg-fuchsia-50 border border-fuchsia-100" />
           <LegendPill colorClass="bg-emerald-500" textClass="text-emerald-700" label="Content creation growth" bgClass="bg-emerald-50 border border-emerald-100" />

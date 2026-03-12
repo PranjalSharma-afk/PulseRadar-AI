@@ -7,18 +7,18 @@ type Props = {
 export function PainPointIntelligence({ insights }: Props) {
   return (
     <section className="mx-auto max-w-6xl px-6 pb-20 pt-10 md:pt-16">
-      <div className="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-6">
-        <div>
-          <h2 className="text-3xl font-extrabold tracking-tight text-black md:text-4xl">
-            Consumer Pain Point Intelligence
-          </h2>
-          <p className="mt-2 text-sm font-medium text-slate-500 md:text-base">
-            Real sentiment from Indian consumers, distilled into actionable product opportunities.
-          </p>
+      <div className="mb-10 text-center">
+        <h2 className="text-3xl font-extrabold tracking-tight text-black md:text-4xl">
+          Consumer Pain Point Intelligence
+        </h2>
+        <p className="mt-2 text-sm font-medium text-slate-500 md:text-base">
+          Real sentiment from Indian consumers, distilled into actionable product opportunities.
+        </p>
+        <div className="mt-4 flex items-center justify-center">
+          <span className="inline-flex items-center rounded-full border border-black/10 bg-white px-3 py-1.5 shadow-sm text-[11px] font-bold uppercase tracking-wider text-slate-500">
+            Derived from reviews
+          </span>
         </div>
-        <span className="inline-flex items-center rounded-full border border-black/10 bg-white px-3 py-1.5 shadow-sm text-[11px] font-bold uppercase tracking-wider text-slate-500">
-          Derived from reviews
-        </span>
       </div>
 
       <div className="grid gap-6 md:grid-cols-2">
