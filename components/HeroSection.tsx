@@ -16,7 +16,7 @@ const exampleTrends = [
 
 export function HeroSection({ onExploreRadar, onShowBriefs }: HeroProps) {
   return (
-    <section className="relative mx-auto flex max-w-6xl flex-col gap-12 px-6 pb-20 pt-28 md:flex-row md:items-center md:gap-16 lg:pt-36">
+    <section className="relative mx-auto flex max-w-6xl flex-col gap-12 px-6 pb-20 pt-28 md:flex-row md:items-center md:gap-16 lg:pt-36 min-h-[85vh]">
       <div className="relative z-10 max-w-xl space-y-8">
         <motion.div 
           className="inline-flex items-center gap-2 rounded-full border border-black/10 bg-white px-3 py-1.5 text-[11px] font-bold uppercase tracking-widest text-slate-600 shadow-sm"
@@ -92,10 +92,13 @@ export function HeroSection({ onExploreRadar, onShowBriefs }: HeroProps) {
 
       <div className="relative z-10 flex flex-1 justify-center md:justify-end">
         <motion.div 
-          className="relative h-[360px] w-[360px] max-w-full rounded-[2rem] bg-white p-6 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.1)] ring-1 ring-black/5 sm:h-[400px] sm:w-[400px]"
+          className="relative h-[360px] w-[360px] max-w-full rounded-[2rem] bg-white p-6 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.1)] ring-1 ring-black/5 sm:h-[400px] sm:w-[400px] cursor-pointer"
           initial={{ opacity: 0, scale: 0.95, y: 40 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2, type: "spring", damping: 20 }}
+          onClick={onExploreRadar}
+          whileHover={{ scale: 1.02 }}
+          title="Click to open Live Radar"
         >
           <div className="relative flex h-full w-full flex-col gap-5 rounded-2xl border-2 border-slate-100 bg-slate-50/50 p-5">
             <div className="flex items-center justify-between gap-3">
@@ -132,6 +135,7 @@ export function HeroSection({ onExploreRadar, onShowBriefs }: HeroProps) {
                 intensity={0.95}
                 bgClass="bg-black"
                 textClass="text-black border-black"
+                onClick={onExploreRadar}
               />
               <TrendSignalDot
                 label="Sea Moss"
@@ -139,6 +143,7 @@ export function HeroSection({ onExploreRadar, onShowBriefs }: HeroProps) {
                 intensity={0.82}
                 bgClass="bg-slate-600"
                 textClass="text-slate-600 border-slate-600"
+                onClick={onExploreRadar}
               />
               <TrendSignalDot
                 label="Moringa"
@@ -146,6 +151,7 @@ export function HeroSection({ onExploreRadar, onShowBriefs }: HeroProps) {
                 intensity={0.88}
                 bgClass="bg-slate-800"
                 textClass="text-slate-800 border-slate-800"
+                onClick={onExploreRadar}
               />
               <TrendSignalDot
                 label="Sleep Aids"
@@ -153,9 +159,14 @@ export function HeroSection({ onExploreRadar, onShowBriefs }: HeroProps) {
                 intensity={0.77}
                 bgClass="bg-slate-400"
                 textClass="text-slate-600 border-slate-400"
+                onClick={onExploreRadar}
               />
             </div>
-            
+
+            {/* Click hint */}
+            <div className="flex items-center justify-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-slate-400">
+              <span>↓ Click to explore live radar</span>
+            </div>
           </div>
         </motion.div>
       </div>
@@ -169,6 +180,7 @@ type TrendSignalDotProps = {
   intensity: number;
   bgClass: string;
   textClass: string;
+  onClick?: () => void;
 };
 
 function TrendSignalDot({
@@ -176,7 +188,8 @@ function TrendSignalDot({
   position,
   intensity,
   bgClass,
-  textClass
+  textClass,
+  onClick
 }: TrendSignalDotProps) {
   return (
     <motion.div
@@ -185,6 +198,7 @@ function TrendSignalDot({
       initial={{ scale: 0, opacity: 0 }}
       animate={{ scale: 1, opacity: 1 }}
       transition={{ duration: 0.6, delay: 0.8 + Math.random() * 0.5 }}
+      onClick={(e) => { e.stopPropagation(); onClick?.(); }}
     >
       <div className="relative group cursor-pointer">
         <span
