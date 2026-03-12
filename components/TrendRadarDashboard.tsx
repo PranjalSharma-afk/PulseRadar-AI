@@ -15,15 +15,17 @@ export function TrendRadarDashboard({ trends, onSelectTrend }: Props) {
       className="mx-auto max-w-6xl px-6 pb-16 pt-10 md:pt-16"
       aria-label="Trend Radar Dashboard"
     >
-      <div className="mb-10 text-center">
-        <h2 className="text-3xl font-extrabold tracking-tight text-black md:text-4xl">
-          Trend Radar Dashboard
-        </h2>
-        <p className="mt-2 text-sm font-medium text-slate-500 md:text-base">
-          Ranked view of India&apos;s fastest-emerging wellness opportunities.
-        </p>
-        <div className="mt-4 flex items-center justify-center">
-          <span className="inline-flex items-center rounded-full border border-black/10 bg-white px-3 py-1.5 shadow-sm text-[11px] font-bold uppercase tracking-wider text-slate-500">
+      <div className="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-6">
+        <div>
+          <h2 className="text-3xl font-extrabold tracking-tight text-black md:text-4xl">
+            Trend Radar Dashboard
+          </h2>
+          <p className="mt-2 text-sm font-medium text-slate-500 md:text-base">
+            Ranked view of India&apos;s fastest-emerging wellness opportunities.
+          </p>
+        </div>
+        <div className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-wider text-slate-500 md:text-xs">
+          <span className="inline-flex items-center rounded-full border border-black/10 bg-white px-3 py-1.5 shadow-sm">
             <span className="mr-2 h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
             Multi-signal score (0–10)
           </span>
