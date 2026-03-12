@@ -16,9 +16,10 @@ const exampleTrends = [
 
 export function HeroSection({ onExploreRadar, onShowBriefs }: HeroProps) {
   return (
-    <section className="relative mx-auto flex max-w-6xl flex-col gap-12 px-6 pb-20 pt-28 md:flex-row md:items-center md:gap-16 lg:pt-36 min-h-[85vh]">
-      <div className="relative z-10 max-w-xl space-y-8">
-        <motion.div 
+    <section className="relative mx-auto grid max-w-6xl grid-cols-1 lg:grid-cols-2 items-center gap-10 px-6 pt-24 pb-16 lg:pt-32 lg:pb-20 min-h-screen lg:min-h-[90vh]">
+      {/* Left: Text Content */}
+      <div className="relative z-10 space-y-7">
+        <motion.div
           className="inline-flex items-center gap-2 rounded-full border border-black/10 bg-white px-3 py-1.5 text-[11px] font-bold uppercase tracking-widest text-slate-600 shadow-sm"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -29,49 +30,47 @@ export function HeroSection({ onExploreRadar, onShowBriefs }: HeroProps) {
         </motion.div>
 
         <motion.h1
-          className="text-balance text-5xl font-extrabold tracking-tighter text-black sm:text-6xl lg:text-7xl leading-[1.05]"
+          className="text-balance text-5xl font-extrabold tracking-tighter text-black sm:text-6xl leading-[1.05]"
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.1 }}
         >
           Discover India&apos;s Next{" "}
-          <span className="block text-slate-400">
-            ₹100Cr Product.
-          </span>
+          <span className="block text-slate-400">₹100Cr Product.</span>
         </motion.h1>
 
         <motion.p
-          className="text-balance text-base font-medium leading-relaxed text-slate-500 sm:text-lg max-w-md"
+          className="text-base font-medium leading-relaxed text-slate-500 sm:text-lg max-w-md"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2, duration: 0.7 }}
         >
-          PulseRadar AI maps search signals, consumer buzz, and market whitespace to find wellness trends months before they scale.
+          PulseRadar AI maps search signals, consumer buzz, and market whitespace
+          to find wellness trends months before they scale.
         </motion.p>
 
         <motion.div
-          className="flex flex-wrap items-center gap-4 pt-4"
+          className="flex flex-wrap items-center gap-4"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3, duration: 0.7 }}
         >
           <button
             onClick={onExploreRadar}
-            className="group flex items-center justify-center gap-2 rounded-xl bg-black px-8 py-4 text-sm font-bold uppercase tracking-wider text-white transition-transform hover:scale-105 active:scale-95"
+            className="flex items-center justify-center gap-2 rounded-xl bg-black px-7 py-3.5 text-sm font-bold uppercase tracking-wider text-white transition-transform hover:scale-105 active:scale-95"
           >
             Explore Radar
           </button>
-
           <button
             onClick={onShowBriefs}
-            className="group flex items-center justify-center gap-2 rounded-xl border-2 border-slate-200 bg-white px-8 py-4 text-sm font-bold uppercase tracking-wider text-black transition-colors hover:border-black hover:bg-slate-50 active:bg-slate-100"
+            className="flex items-center justify-center gap-2 rounded-xl border-2 border-slate-200 bg-white px-7 py-3.5 text-sm font-bold uppercase tracking-wider text-black transition-colors hover:border-black hover:bg-slate-50 active:bg-slate-100"
           >
             See Briefs
           </button>
         </motion.div>
 
         <motion.div
-          className="flex flex-wrap items-center gap-2 pt-6"
+          className="flex flex-wrap items-center gap-2"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.6, duration: 1 }}
@@ -90,9 +89,10 @@ export function HeroSection({ onExploreRadar, onShowBriefs }: HeroProps) {
         </motion.div>
       </div>
 
-      <div className="relative z-10 flex flex-1 justify-center md:justify-end">
-        <motion.div 
-          className="relative h-[360px] w-[360px] max-w-full rounded-[2rem] bg-white p-6 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.1)] ring-1 ring-black/5 sm:h-[400px] sm:w-[400px] cursor-pointer"
+      {/* Right: Radar Card */}
+      <div className="relative z-10 flex justify-center lg:justify-end">
+        <motion.div
+          className="relative h-[340px] w-[340px] sm:h-[380px] sm:w-[380px] max-w-full rounded-[2rem] bg-white p-5 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.12)] ring-1 ring-black/5 cursor-pointer"
           initial={{ opacity: 0, scale: 0.95, y: 40 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2, type: "spring", damping: 20 }}
@@ -100,13 +100,13 @@ export function HeroSection({ onExploreRadar, onShowBriefs }: HeroProps) {
           whileHover={{ scale: 1.02 }}
           title="Click to open Live Radar"
         >
-          <div className="relative flex h-full w-full flex-col gap-5 rounded-2xl border-2 border-slate-100 bg-slate-50/50 p-5">
+          <div className="relative flex h-full w-full flex-col gap-4 rounded-2xl border-2 border-slate-100 bg-slate-50/50 p-5">
             <div className="flex items-center justify-between gap-3">
               <div>
                 <p className="text-xs font-bold uppercase tracking-widest text-black">
                   Live Radar
                 </p>
-                <p className="mt-1 text-[10px] font-medium text-slate-500">
+                <p className="mt-0.5 text-[10px] font-medium text-slate-500">
                   Real-time multi-signal mapped
                 </p>
               </div>
@@ -116,15 +116,15 @@ export function HeroSection({ onExploreRadar, onShowBriefs }: HeroProps) {
               </div>
             </div>
 
-            <div className="relative flex-1 rounded-xl bg-white border border-slate-100 p-5 shadow-sm overflow-hidden">
+            <div className="relative flex-1 rounded-xl bg-white border border-slate-100 p-4 shadow-sm overflow-hidden">
               <div className="absolute inset-0 flex items-center justify-center opacity-30">
                 <motion.div
-                  className="h-64 w-64 rounded-full border-2 border-slate-300"
+                  className="h-56 w-56 rounded-full border-2 border-slate-300"
                   animate={{ scale: [1, 1.1, 1], opacity: [0.3, 0.6, 0.3] }}
                   transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
                 />
-                <div className="absolute h-44 w-44 rounded-full border border-slate-200" />
-                <div className="absolute h-28 w-28 rounded-full border border-slate-200" />
+                <div className="absolute h-40 w-40 rounded-full border border-slate-200" />
+                <div className="absolute h-24 w-24 rounded-full border border-slate-200" />
                 <div className="absolute h-px w-full bg-slate-100" />
                 <div className="absolute h-full w-px bg-slate-100" />
               </div>
@@ -163,7 +163,6 @@ export function HeroSection({ onExploreRadar, onShowBriefs }: HeroProps) {
               />
             </div>
 
-            {/* Click hint */}
             <div className="flex items-center justify-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-slate-400">
               <span>↓ Click to explore live radar</span>
             </div>
