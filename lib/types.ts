@@ -66,6 +66,8 @@ export type IntelligenceReport = {
     type: "logo" | "illustration" | null;
   } | null;
 
+  websiteUrl?: string;
+
   // Section A
   analysis: {
     overview: string;

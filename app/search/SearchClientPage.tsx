@@ -107,6 +107,22 @@ export function SearchClientPage({ result, query }: { result: SearchResult; quer
                 <p className="text-lg font-medium text-slate-500 max-w-2xl">
                   Dynamic market signals, competitor analysis, and consumer buzz mapped for {query}.
                 </p>
+
+                {report.websiteUrl && (
+                  <div className="mt-8">
+                    <a 
+                      href={report.websiteUrl} 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center justify-center h-12 px-6 rounded-2xl bg-black text-white text-sm font-bold hover:bg-slate-800 transition-all shadow-[0_10px_25px_-5px_rgba(0,0,0,0.1),0_8px_10px_-6px_rgba(0,0,0,0.1)] hover:-translate-y-0.5 gap-2"
+                    >
+                      Visit Official Website
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                      </svg>
+                    </a>
+                  </div>
+                )}
               </div>
 
               {report.visual && (

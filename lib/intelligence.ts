@@ -6,8 +6,8 @@ import { IntelligenceReport, CompetitorProfile, TrendSignal, TrendTimepoint, Pai
 function classifyKeyword(keyword: string): "company" | "product" | "ingredient" | "unknown" {
   const lower = keyword.toLowerCase();
   
-  const companyKeywords = ["wellness", "himalaya", "nykaa", "mamaearth", "healthkart", "curefit", "boldfit"];
-  const ingredientKeywords = ["magnesium", "protein", "ashwagandha", "moss", "collagen", "moringa", "vitamin", "zinc", "curcumin", "shilajit", "creatine"];
+  const companyKeywords = ["wellness", "himalaya", "nykaa", "mamaearth", "healthkart", "curefit", "boldfit", "minimalist", "plum", "derma", "dot", "bodywise", "mosaic", "sugar"];
+  const ingredientKeywords = ["magnesium", "protein", "ashwagandha", "moss", "collagen", "moringa", "vitamin", "zinc", "curcumin", "shilajit", "creatine", "retinol", "niacinamide", "hyaluronic", "melatonin", "bcaa"];
   
   if (companyKeywords.some(k => lower.includes(k))) return "company";
   if (ingredientKeywords.some(k => lower.includes(k))) return "ingredient";
@@ -119,12 +119,20 @@ function generateDynamicPainPoints(keyword: string, type: "company" | "product" 
 
 const VALID_DOMAINS = [
   "magnesium", "ashwagandha", "protein powder", "creatine", "collagen",
-  "minimalist", "mamaearth", "nykaa", "sugar cosmetics", "plum", "mCaffeine",
-  "protein bar", "electrolyte drink", "kombucha", "matcha", "bcaa",
-  "curcumin", "vitamin c", "hyaluronic acid", "retinol", "niacinamide",
+  "minimalist", "mamaearth", "nykaa", "sugar cosmetics", "plum", "mCaffeine", "the derma co", "dot & key",
+  "protein bar", "electrolyte drink", "kombucha", "matcha", "bcaa", "melatonin", "shilajit",
+  "curcumin", "vitamin c", "hyaluronic acid", "retinol", "niacinamide", "zinc",
   "sleep supplement", "energy drink", "meal replacement", "multivitamin",
-  "whey protein", "plant protein", "gummies", "skincare", "haircare", "supplements"
+  "whey protein", "plant protein", "gummies", "skincare", "haircare", "supplements",
+  "mosaic wellness", "man matters", "be bodywise", "healthkart", "fast&up", "carbamide forte"
 ];
+
+const CONCEPT_SYNONYMS: Record<string, string[]> = {
+  "sleep mineral": ["Magnesium", "Melatonin", "Ashwagandha"],
+  "muscle powder": ["Whey Protein", "Plant Protein", "Creatine"],
+  "skin acid": ["Hyaluronic Acid", "Retinol", "Vitamin C"],
+  "stress relief": ["Ashwagandha", "Magnesium", "L-Theanine"]
+};
 
 // Helper to calculate Levenshtein distance for typos
 function getEditDistance(a: string, b: string): number {
@@ -167,6 +175,13 @@ function getEditDistance(a: string, b: string): number {
 function validateSearchQuery(keyword: string): { isValid: boolean, suggestions: string[] } {
   const normalized = keyword.toLowerCase().trim();
   
+  // Check for semantic conceptual synonyms 
+  for (const [key, suggestionsList] of Object.entries(CONCEPT_SYNONYMS)) {
+     if (normalized.includes(key) || key.includes(normalized)) {
+        return { isValid: false, suggestions: suggestionsList };
+     }
+  }
+
   // Exact or partial strict match
   if (VALID_DOMAINS.some(domain => normalized.includes(domain) || domain.includes(normalized))) {
     return { isValid: true, suggestions: [] };
@@ -246,7 +261,11 @@ export async function generateIntelligenceForKeyword(keyword: string): Promise<S
         "mcaffeine": "mcaffeine.com",
         "healthkart": "healthkart.com",
         "curefit": "cult.fit",
-        "himalaya": "himalayawellness.in"
+        "himalaya": "himalayawellness.in",
+        "the derma co": "thedermaco.com",
+        "dot & key": "dotandkey.com",
+        "man matters": "manmatters.com",
+        "be bodywise": "bebodywise.com"
      };
      const targetDomain = domainMap[kwLower] || `${kwLower.replace(/\s+/g, '')}.com`;
      visual = { url: `https://logo.clearbit.com/${targetDomain}`, type: "logo" };
@@ -313,42 +332,105 @@ export async function generateIntelligenceForKeyword(keyword: string): Promise<S
     };
   });
 
-  // Competitors
-  const competitors: CompetitorProfile[] = [
-    {
-      id: "comp1",
-      name: "VitaCore India",
-      shortDescription: `Leading D2C brand focusing on premium ${capitalizedKeyword} extracts.`,
-      mainCategory: "Premium Supplements",
-      overview: `VitaCore India has quickly captured market share in the premium wellness segment by focusing specifically on high-bioavailability ${capitalizedKeyword} formulations.`,
-      productsOffered: [`${capitalizedKeyword} Gummies`, `Liquid ${capitalizedKeyword}`, `${capitalizedKeyword} Complex`],
-      positioning: "Premium, Science-backed, High Bioavailability",
-      productDistribution: [
-        { category: "Gummies", percentage: 45 },
-        { category: "Capsules", percentage: 35 },
-        { category: "Powders", percentage: 20 },
-      ]
-    },
-    {
-      id: "comp2",
-      name: "Nature's Blueprint",
-      shortDescription: `Affordable, mass-market provider of ${capitalizedKeyword}.`,
-      mainCategory: "Mass Market Wellness",
-      overview: `Targeting tier 2 and tier 3 cities with affordable, generic formulations of ${capitalizedKeyword} and related wellness products.`,
-      productsOffered: [`${capitalizedKeyword} Tablets`, `Multivitamins with ${capitalizedKeyword}`],
-      positioning: "Affordable, Accessible, Daily Use",
-      productDistribution: [
-        { category: "Tablets", percentage: 70 },
-        { category: "Syrups", percentage: 30 },
-      ]
-    }
-  ];
+  // Dynamic Competitors based on Category
+  let competitors: CompetitorProfile[] = [];
+  const isSkinType = kwLower.includes("minimalist") || kwLower.includes("mamaearth") || kwLower.includes("plum") || kwLower.includes("derma") || kwLower.includes("retinol") || kwLower.includes("acid");
+  
+  if (isSkinType) {
+    competitors = [
+      {
+        id: "comp1_skin",
+        name: "The Derma Co",
+        shortDescription: `Science-backed skincare formulated by dermatologists.`,
+        mainCategory: "Active Skincare",
+        overview: `The Derma Co focuses on exact active ingredient percentages aimed directly at treating acne, pigmentation, and skin barriers without fluff.`,
+        productsOffered: [`Niacinamide Serums`, `Salicylic Acid Washes`, `Retinol Gels`],
+        positioning: "Clinical, Direct, Problem-Solving",
+        productDistribution: [
+          { category: "Serums", percentage: 50 },
+          { category: "Cleansers", percentage: 30 },
+          { category: "Sunscreens", percentage: 20 },
+        ]
+      },
+      {
+        id: "comp2_skin",
+        name: "Dot & Key",
+        shortDescription: `Aesthetic-first targeted aesthetic skincare.`,
+        mainCategory: "Premium Skincare",
+        overview: `Targeting Millennial and Gen-Z consumers with aesthetic packaging and scientifically backed formulations combining fruits and actives.`,
+        productsOffered: [`Ceramide Creams`, `Watermelon Sunscreen`, `Cica Night Gels`],
+        positioning: "Aesthetic, Gentle, Fruit-Forward",
+        productDistribution: [
+          { category: "Moisturizers", percentage: 40 },
+          { category: "Sunscreens", percentage: 40 },
+          { category: "Serums", percentage: 20 },
+        ]
+      },
+      {
+        id: "comp3_skin",
+        name: "Plum Goodness",
+        shortDescription: `100% Vegan, cruelty-free beauty.`,
+        mainCategory: "Clean Skincare",
+        overview: `Mass-premium positioning focusing on toxic-free, clean beauty products that are highly accessible.`,
+        productsOffered: [`Green Tea Range`, `Vitamin C Serums`],
+        positioning: "Vegan, Clean, Approachable",
+        productDistribution: [
+          { category: "Face Care", percentage: 60 },
+          { category: "Body Care", percentage: 40 },
+        ]
+      }
+    ];
+  } else {
+    // Supplement / General
+    competitors = [
+      {
+        id: "comp1_supp",
+        name: "HealthKart",
+        shortDescription: `India's largest unified nutrition and supplement platform.`,
+        mainCategory: "Mass Market Nutrition",
+        overview: `HealthKart provides deep D2C penetration via both private labels and multi-brand distribution for ${capitalizedKeyword} and related macro-nutrients.`,
+        productsOffered: [`HK Vitals ${capitalizedKeyword}`, `MuscleBlaze Proteins`],
+        positioning: "Trusted, Massive Distribution, Price-Competitive",
+        productDistribution: [
+          { category: "Vitamins/Minerals", percentage: 45 },
+          { category: "Sports Nutrition", percentage: 45 },
+          { category: "Ayurveda", percentage: 10 },
+        ]
+      },
+      {
+        id: "comp2_supp",
+        name: "Fast&Up",
+        shortDescription: `Effervescent sports and active nutrition experts.`,
+        mainCategory: "Active Nutrition",
+        overview: `Pioneered effervescent tablet technology in India to provide highly bioavailable, quick-acting ${capitalizedKeyword} and hydration metrics.`,
+        productsOffered: [`${capitalizedKeyword} Hydration Tubes`, `Plant Protein`, `Electrolytes`],
+        positioning: "Athletic, Effervescent, High-Absorption",
+        productDistribution: [
+          { category: "Effervescent Tubes", percentage: 70 },
+          { category: "Powders", percentage: 30 },
+        ]
+      },
+      {
+         id: "comp3_supp",
+         name: "Carbamide Forte",
+         shortDescription: `High-dose clinical grade supplements.`,
+         mainCategory: "Clinical Nutrition",
+         overview: `Focuses on aggressive, high-dosage clinical formulations of ${capitalizedKeyword} aimed at addressing strict deficiencies.`,
+         productsOffered: [`${capitalizedKeyword} Complex`, `High-Potency Multi`],
+         positioning: "High-Dose, Clinical Grade, Affordable",
+         productDistribution: [
+           { category: "Tablets", percentage: 80 },
+           { category: "Gummies", percentage: 20 },
+         ]
+       }
+    ];
+  }
 
   // Trend Signal representing the dynamic score
   const trendScore: TrendSignal = {
     id: keyword.toLowerCase().replace(/\s+/g, '-'),
     name: capitalizedKeyword,
-    category: type === "ingredient" ? "Sleep" : "Energy", // just mock mapping
+    category: type === "ingredient" ? "Immunity" : isSkinType ? "Beauty" : "Energy",
     score: opportunityScore,
     searchGrowth: searchGrowth,
     socialGrowth: socialGrowth,
@@ -359,49 +441,26 @@ export async function generateIntelligenceForKeyword(keyword: string): Promise<S
     opportunityInsight: `Strong consumer demand signals for ${capitalizedKeyword} with whitespace in premium, highly-bioavailable formats.`
   };
 
-  // Trend momentum concepts mapping across quadrents
-  const concepts: TrendConcept[] = [
-    {
-      id: "c1",
-      name: `${capitalizedKeyword} Sleep Gummies`,
-      demand: 85,
-      growth: 92,
-      targetSegment: "Insomniacs, Stressed Professionals",
-      opportunityLevel: "High"  // Top Right (Breakout)
-    },
-    {
-      id: "c2",
-      name: `${capitalizedKeyword} Hydration Mix`,
-      demand: 35,
-      growth: 88,
-      targetSegment: "Athletes, Fitness Enthusiasts",
-      opportunityLevel: "High" // Top Left (Emerging)
-    },
-    {
-      id: "c3",
-      name: `${capitalizedKeyword} Standard Capsules`,
-      demand: 90,
-      growth: 25,
-      targetSegment: "General Wellness",
-      opportunityLevel: "Low"  // Bottom Right (Saturated)
-    },
-    {
-      id: "c4",
-      name: `${capitalizedKeyword} Pet Soft Chews`,
-      demand: 20,
-      growth: 30,
-      targetSegment: "Pet Owners",
-      opportunityLevel: "Medium" // Bottom Left (Experimental)
-    },
-    {
-      id: "c5",
-      name: `${capitalizedKeyword} Coffee Alternative`,
-      demand: 45,
-      growth: 75,
-      targetSegment: "Biohackers, Alternative Health",
-      opportunityLevel: "Medium" // Emerging / Breakout border
-    }
-  ];
+  // Trend momentum concepts dynamically tailored
+  let concepts: TrendConcept[] = [];
+  if (isSkinType) {
+     concepts = [
+      { id: "c1", name: `${capitalizedKeyword} Peeling Solutions`, demand: 85, growth: 92, targetSegment: "Acne-prone, Exfoliation Seekers", opportunityLevel: "High" },
+      { id: "c2", name: `${capitalizedKeyword} Barrier Repair Creams`, demand: 60, growth: 88, targetSegment: "Dry/Sensitive Skin", opportunityLevel: "High" },
+      { id: "c3", name: `${capitalizedKeyword} Body Lotions`, demand: 90, growth: 25, targetSegment: "General Skincare", opportunityLevel: "Low" },
+      { id: "c4", name: `${capitalizedKeyword} Lip Treatments`, demand: 20, growth: 30, targetSegment: "Aesthetic Consumers", opportunityLevel: "Medium" },
+      { id: "c5", name: `${capitalizedKeyword} Overnight Masks`, demand: 45, growth: 75, targetSegment: "Anti-aging", opportunityLevel: "Medium" }
+    ];
+  } else {
+    // Supplements / Health
+    concepts = [
+      { id: "c1", name: `${capitalizedKeyword} Sleep Gummies`, demand: 85, growth: 92, targetSegment: "Insomniacs, Stressed Professionals", opportunityLevel: "High" },
+      { id: "c2", name: `${capitalizedKeyword} Hydration Mix`, demand: 35, growth: 88, targetSegment: "Athletes, Fitness Enthusiasts", opportunityLevel: "High" },
+      { id: "c3", name: `${capitalizedKeyword} Standard Capsules`, demand: 90, growth: 25, targetSegment: "General Wellness", opportunityLevel: "Low" },
+      { id: "c4", name: `${capitalizedKeyword} Pet Soft Chews`, demand: 20, growth: 30, targetSegment: "Pet Owners", opportunityLevel: "Medium" },
+      { id: "c5", name: `${capitalizedKeyword} Coffee Alternative`, demand: 45, growth: 75, targetSegment: "Biohackers, Alternative Health", opportunityLevel: "Medium" }
+    ];
+  }
 
   return {
     isValid: true,
@@ -409,6 +468,7 @@ export async function generateIntelligenceForKeyword(keyword: string): Promise<S
       keyword: capitalizedKeyword,
       type: resolvedType,
       visual,
+      ...(visual?.type === 'logo' && { websiteUrl: `https://${visual.url.split('clearbit.com/')[1]}` }),
       analysis,
       dashboardMetrics: {
         opportunityScore: parseFloat(opportunityScore.toFixed(1)),

@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import {
   Line,
   LineChart,
@@ -16,6 +17,29 @@ type Props = {
 };
 
 export function TrendSignalGraph({ selectedTrend, series }: Props) {
+  const [timeline, setTimeline] = useState<"3M" | "6M" | "1Y" | "3Y" | "ALL">("1Y");
+
+  // Determine how many data points to show based on timeline
+  // The mock series currently has 6 quarters.
+  // We'll mimic dynamic data slicing here based on selection.
+  const getVisibleData = () => {
+    switch (timeline) {
+      case "3M":
+        return series.slice(-1); // Show latest 1 quarter (approx 3M)
+      case "6M":
+        return series.slice(-2); // Show latest 2 quarters
+      case "1Y":
+        return series.slice(-4); // Show latest 4 quarters
+      case "3Y":
+      case "ALL":
+        return series; // Show all 6 available quarters in our mock
+      default:
+        return series;
+    }
+  };
+
+  const visibleData = getVisibleData();
+
   return (
     <section className="mx-auto max-w-6xl px-6 pb-20 pt-10 md:pt-16">
       <div className="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-6">
@@ -39,7 +63,7 @@ export function TrendSignalGraph({ selectedTrend, series }: Props) {
       <div className="card-elevated border-2 rounded-[2rem] p-8 bg-white/50">
         <div className="h-80 w-full font-bold">
           <ResponsiveContainer width="100%" height="100%">
-            <LineChart data={series}>
+            <LineChart data={visibleData}>
               <XAxis
                 dataKey="month"
                 stroke="#94a3b8"
@@ -92,6 +116,25 @@ export function TrendSignalGraph({ selectedTrend, series }: Props) {
               />
             </LineChart>
           </ResponsiveContainer>
+        </div>
+
+        {/* Timeline Selector Feature */}
+        <div className="mt-8 flex justify-center">
+           <div className="inline-flex items-center rounded-xl bg-slate-100/50 p-1 border border-slate-200">
+             {["3M", "6M", "1Y", "3Y", "ALL"].map((t) => (
+               <button
+                 key={t}
+                 onClick={() => setTimeline(t as any)}
+                 className={`px-4 py-1.5 text-xs font-bold transition-all rounded-lg ${
+                   timeline === t 
+                     ? "bg-white text-black shadow-sm" 
+                     : "text-slate-500 hover:text-slate-700"
+                 }`}
+               >
+                 {t}
+               </button>
+             ))}
+           </div>
         </div>
       </div>
     </section>
