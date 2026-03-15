@@ -48,6 +48,15 @@ export type CompetitorProfile = {
   productDistribution: { category: string; percentage: number }[];
 };
 
+export type TrendConcept = {
+  id: string;
+  name: string;
+  demand: number; // X-axis (0-100)
+  growth: number; // Y-axis (0-100)
+  targetSegment: string;
+  opportunityLevel: "High" | "Medium" | "Low";
+};
+
 export type IntelligenceReport = {
   keyword: string;
   type: "company" | "product" | "ingredient" | "unknown";
@@ -77,6 +86,9 @@ export type IntelligenceReport = {
 
   // Feature 5
   trendScore: TrendSignal;
+
+  // Radar Features
+  concepts: TrendConcept[];
 
   // For charts
   timeSeries: TrendTimepoint[];

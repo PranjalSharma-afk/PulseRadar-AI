@@ -10,6 +10,7 @@ import { PainPointIntelligence } from "@/components/PainPointIntelligence";
 import { TrendSignalGraph } from "@/components/TrendSignalGraph";
 import { TrendScoringFramework } from "@/components/TrendScoringFramework";
 import { CompetitorIntelligence } from "@/components/CompetitorIntelligence";
+import { TrendMomentumRadar } from "@/components/TrendMomentumRadar";
 
 export function SearchClientPage({ report, query }: { report: IntelligenceReport; query: string }) {
   return (
@@ -134,6 +135,11 @@ export function SearchClientPage({ report, query }: { report: IntelligenceReport
                 </motion.div>
              </div>
           </section>
+
+          {/* New Feature: Trend Momentum Radar */}
+          <div className="border-t border-slate-100">
+             <TrendMomentumRadar concepts={report.concepts} />
+          </div>
 
           {/* Feature 6 / Dynamic Trend Signal Graph */}
           {report.timeSeries.length > 0 && (

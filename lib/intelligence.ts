@@ -1,4 +1,4 @@
-import { IntelligenceReport, CompetitorProfile, TrendSignal, TrendTimepoint, PainPointInsight } from "./types";
+import { IntelligenceReport, CompetitorProfile, TrendSignal, TrendTimepoint, PainPointInsight, TrendConcept } from "./types";
 
 /**
  * Heuristic to guess the intent of the keyword.
@@ -111,6 +111,50 @@ export async function generateIntelligenceForKeyword(keyword: string): Promise<I
     opportunityInsight: `Strong consumer demand signals for ${capitalizedKeyword} with whitespace in premium, highly-bioavailable formats.`
   };
 
+  // Trend momentum concepts mapping across quadrents
+  const concepts: TrendConcept[] = [
+    {
+      id: "c1",
+      name: `${capitalizedKeyword} Sleep Gummies`,
+      demand: 85,
+      growth: 92,
+      targetSegment: "Insomniacs, Stressed Professionals",
+      opportunityLevel: "High"  // Top Right (Breakout)
+    },
+    {
+      id: "c2",
+      name: `${capitalizedKeyword} Hydration Mix`,
+      demand: 35,
+      growth: 88,
+      targetSegment: "Athletes, Fitness Enthusiasts",
+      opportunityLevel: "High" // Top Left (Emerging)
+    },
+    {
+      id: "c3",
+      name: `${capitalizedKeyword} Standard Capsules`,
+      demand: 90,
+      growth: 25,
+      targetSegment: "General Wellness",
+      opportunityLevel: "Low"  // Bottom Right (Saturated)
+    },
+    {
+      id: "c4",
+      name: `${capitalizedKeyword} Pet Soft Chews`,
+      demand: 20,
+      growth: 30,
+      targetSegment: "Pet Owners",
+      opportunityLevel: "Medium" // Bottom Left (Experimental)
+    },
+    {
+      id: "c5",
+      name: `${capitalizedKeyword} Coffee Alternative`,
+      demand: 45,
+      growth: 75,
+      targetSegment: "Biohackers, Alternative Health",
+      opportunityLevel: "Medium" // Emerging / Breakout border
+    }
+  ];
+
   return {
     keyword: capitalizedKeyword,
     type,
@@ -130,6 +174,7 @@ export async function generateIntelligenceForKeyword(keyword: string): Promise<I
     competitors,
     painPoints,
     trendScore,
+    concepts,
     timeSeries
   };
 }
