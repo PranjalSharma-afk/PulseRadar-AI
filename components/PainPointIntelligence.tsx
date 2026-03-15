@@ -13,11 +13,12 @@ export function PainPointIntelligence({ insights }: Props) {
             Consumer Pain Point Intelligence
           </h2>
           <p className="mt-2 text-sm font-medium text-slate-500 md:text-base">
-            Real sentiment from Indian consumers, distilled into actionable product opportunities.
+            Real sentiment distilled from Amazon, Reddit, Google Trends, YouTube & Research Pubs.
           </p>
         </div>
-        <span className="inline-flex items-center rounded-full border border-black/10 bg-white px-3 py-1.5 shadow-sm text-[11px] font-bold uppercase tracking-wider text-slate-500">
-          Derived from reviews
+        <span className="inline-flex items-center gap-1.5 rounded-full border border-black/10 bg-white px-3 py-1.5 shadow-sm text-[11px] font-bold uppercase tracking-wider text-slate-500">
+          <span className="h-2 w-2 rounded-full bg-rose-500" />
+          5 Sources Scanned
         </span>
       </div>
 

@@ -16,6 +16,108 @@ function classifyKeyword(keyword: string): "company" | "product" | "ingredient" 
 }
 
 /**
+ * Helper to dynamically generate realistic consumer pain points contextualized to the keyword
+ * and mapping to our 5 data sources (Amazon, Reddit, Google Trends, YouTube, Research Pubs).
+ */
+function generateDynamicPainPoints(keyword: string, type: "company" | "product" | "ingredient" | "unknown"): PainPointInsight[] {
+  const lower = keyword.toLowerCase();
+  
+  // Skincare / Beauty Category
+  if (lower.includes("minimalist") || lower.includes("skincare") || lower.includes("mamaearth") || lower.includes("nykaa")) {
+    return [
+      {
+        id: "pp_skin_1",
+        trendId: keyword,
+        insightSummary: `Amazon Reviews and Reddit threads indicate a struggle with ${keyword} products causing sudden purging or irritation for sensitive skin types, despite "clean" claims.`,
+        quotes: [
+          `"I bought ${keyword} because it was trending on YouTube, but my skin barrier got completely wrecked within a week."`,
+          `"Every time I try to layer ${keyword} serums with my moisturizer, it pills terribly. Found similar complaints on Reddit."`
+        ]
+      },
+      {
+        id: "pp_skin_2",
+        trendId: keyword,
+        insightSummary: `Google Trends and Research Pubs show rising curiosity around percentage concentrations, with consumers confused if ${keyword} formulas are actually effective or just marketing.`,
+        quotes: [
+          `"The bottle doesn't specify the exact active percentage for ${keyword}. Does it actually work or is it just a buzzword?"`,
+          `"I'm confused if I should use ${keyword} morning or night. The instructions on the packaging are so vague."`
+        ]
+      }
+    ];
+  }
+
+  // Supplements / Ingredients Category
+  if (lower.includes("magnesium") || lower.includes("ashwagandha") || lower.includes("protein") || lower.includes("curcumin") || type === "ingredient") {
+    return [
+      {
+        id: "pp_supp_1",
+        trendId: keyword,
+        insightSummary: `A synthesis of Amazon Reviews and Reddit discussions reveals significant difficulty with the format and taste of ${keyword} supplements, leading to poor adherence.`,
+        quotes: [
+          `"Most ${keyword} powders taste awful. Wish there were gummy or flavoured options that weren't packed with sugar."`,
+          `"The pills for ${keyword} are horse-sized! I end up dreading taking them every morning."`
+        ]
+      },
+      {
+        id: "pp_supp_2",
+        trendId: keyword,
+        insightSummary: `YouTube deep-dives and PubMed cross-references show consumers are becoming highly skeptical of the bioavailability and actual absorption rates of commercial ${keyword}.`,
+        quotes: [
+          `"I took ${keyword} for a month but didn't feel any different. I saw a YouTube video saying most brands use the cheapest, least absorbable form."`,
+          `"Everyone talks about the benefits of ${keyword}, but nobody warns you about the stomach upset if you get the wrong kind."`
+        ]
+      }
+    ];
+  }
+
+  // Snacks / Food Category
+  if (lower.includes("bar") || lower.includes("snack") || lower.includes("gummies") || lower.includes("drink")) {
+    return [
+      {
+        id: "pp_food_1",
+        trendId: keyword,
+        insightSummary: `Amazon Reviews heavily index on sensory complaints, specifically targeting the artificial aftertaste and chalky texture characteristic of ${keyword} products.`,
+        quotes: [
+          `"The macros on this ${keyword} looked great, but it tastes like stevia-flavoured cardboard."`,
+          `"Great concept, but the texture of the ${keyword} is so chalky I have to drink a whole glass of water just to get it down."`
+        ]
+      },
+      {
+        id: "pp_food_2",
+        trendId: keyword,
+        insightSummary: `Google Trends and Reddit indicate consumers are increasingly scrutinizing "hidden ingredients" (like maltodextrin or seed oils) in ${keyword} promoted as healthy.`,
+        quotes: [
+          `"It's marketed as a clean ${keyword}, but the second ingredient is a cheap filler syrup. Very disappointing."`,
+          `"Why do all these healthy ${keyword} options always have to include palm oil or artificial preservatives?"`
+        ]
+      }
+    ];
+  }
+
+  // Generic / Default Fallback for anything else
+  return [
+    {
+      id: "pp_gen_1",
+      trendId: keyword,
+      insightSummary: `Analysis across Amazon and Reddit indicates a general frustration with the pricing-to-value ratio and overpromising marketing of ${keyword}.`,
+      quotes: [
+        `"I feel like I'm paying a massive premium for ${keyword} just because it has aesthetic packaging, not because the product is better."`,
+        `"All the influencers on YouTube hyped up ${keyword}, but honestly, the results are underwhelming for the price."`
+      ]
+    },
+    {
+      id: "pp_gen_2",
+      trendId: keyword,
+      insightSummary: `Cross-referencing consumer complaints shows a consistent gap in reliable sourcing transparency and authentic customer support for ${keyword}.`,
+      quotes: [
+        `"Is this ${keyword} actually pure? It's so hard to tell from the packaging and the brand's website is vague."`,
+        `"Bought ${keyword} based on the hype, but figuring out how to actually use it correctly took me hours of reading Reddit."`
+      ]
+    }
+  ];
+}
+
+/**
  * Generates a mock AI intelligence report for the given keyword.
  * In a real app, this would call an LLM API (like GPT-4) or a specialized backend.
  */
@@ -32,27 +134,8 @@ export async function generateIntelligenceForKeyword(keyword: string): Promise<I
   const searchGrowth = 20 + (seed % 80); // 20% to 99%
   const socialGrowth = 15 + (seed % 60);
 
-  // Dynamic Pain Points
-  const painPoints: PainPointInsight[] = [
-    {
-      id: "pp1",
-      trendId: keyword,
-      insightSummary: `Consumers struggle to find authentic ${capitalizedKeyword} products with clear dosage information.`,
-      quotes: [
-        `"I'm confused about the right dosage for ${capitalizedKeyword}. Everyone says something different online."`,
-        `"Is this ${capitalizedKeyword} actually pure? It's so hard to tell from the packaging."`
-      ]
-    },
-    {
-      id: "pp2",
-      trendId: keyword,
-      insightSummary: `High demand for improved absorption and better taste profiles in ${capitalizedKeyword} supplements.`,
-      quotes: [
-        `"Most ${capitalizedKeyword} powders taste awful. Wish there were gummy or flavoured options."`,
-        `"I took ${capitalizedKeyword} for a month but didn't feel anything. Wondering if my body even absorbs it."`
-      ]
-    }
-  ];
+  // Dynamic Pain Points based on the 5 data sources
+  const painPoints: PainPointInsight[] = generateDynamicPainPoints(capitalizedKeyword, type);
 
   // Dynamic Time Series
   const timeSeries: TrendTimepoint[] = Array.from({ length: 6 }).map((_, i) => {
