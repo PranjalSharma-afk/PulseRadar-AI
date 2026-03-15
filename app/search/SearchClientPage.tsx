@@ -128,21 +128,13 @@ export function SearchClientPage({ result, query }: { result: SearchResult; quer
                 )}
               </div>
 
-              {report.visual && (
+              {report.visual && report.visual.type === 'logo' && (
                 <div className="md:mt-4 shrink-0 shadow-lg rounded-2xl overflow-hidden border-2 border-slate-100 bg-white p-2">
-                   {report.visual.type === 'logo' ? (
-                     <img 
-                       src={report.visual.url} 
-                       alt={`${report.keyword} Logo`} 
-                       className="w-24 h-24 object-contain rounded-xl bg-white" 
-                     />
-                   ) : (
-                     <img 
-                       src={report.visual.url} 
-                       alt={`${report.keyword} Illustration`} 
-                       className="w-32 h-32 object-cover rounded-xl" 
-                     />
-                   )}
+                  <img
+                    src={report.visual.url}
+                    alt={`${report.keyword} Logo`}
+                    className="w-24 h-24 object-contain rounded-xl bg-white"
+                  />
                 </div>
               )}
             </motion.div>
