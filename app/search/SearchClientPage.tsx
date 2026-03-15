@@ -256,6 +256,7 @@ export function SearchClientPage({ result, query }: { result: SearchResult; quer
               entityType={report.type}
               concepts={report.concepts}
               competitors={report.competitors}
+              timeSeries={report.timeSeries}
             />
           </div>
 
