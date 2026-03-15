@@ -125,12 +125,17 @@ export function HeroSection({ onExploreRadar, onShowBriefs }: HeroProps) {
             Trending:
           </span>
           {exampleTrends.map((trend) => (
-            <span
+            <button
               key={trend}
-              className="rounded-md bg-slate-100 px-2 py-1 text-[10px] font-bold tracking-wide text-slate-600"
+              type="button"
+              onClick={() => {
+                setSearchQuery(trend);
+                router.push(`/search?q=${encodeURIComponent(trend)}`);
+              }}
+              className="rounded-md bg-slate-100 px-2 py-1 text-[10px] font-bold tracking-wide text-slate-600 transition-colors hover:bg-slate-200 hover:text-black"
             >
               {trend}
-            </span>
+            </button>
           ))}
         </motion.div>
       </div>
