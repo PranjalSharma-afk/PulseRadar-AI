@@ -17,6 +17,9 @@ export type TrendTimepoint = {
   searchInterest: number;
   socialVolume: number;
   contentCreation: number;
+  reviewVolume?: number;
+  productLaunchMentions?: number;
+  marketBuzzIndex?: number;
 };
 
 export type OpportunityBrief = {
@@ -46,6 +49,8 @@ export type CompetitorProfile = {
   productsOffered: string[];
   positioning: string;
   productDistribution: { category: string; percentage: number }[];
+  pricePositioning?: number; // 0-100 (low=budget, high=premium)
+  brandVisibility?: number;  // 0-100
 };
 
 export type TrendConcept = {

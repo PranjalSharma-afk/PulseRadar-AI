@@ -328,7 +328,10 @@ export async function generateIntelligenceForKeyword(keyword: string): Promise<S
       month: quarters[i],
       searchInterest: Math.floor(baseInterest * (1 + (seed % 20) / 100)),
       socialVolume: Math.floor((baseInterest - 10) * (1 + (seed % 30) / 100)),
-      contentCreation: Math.floor((baseInterest - 20) * (1 + (seed % 40) / 100))
+      contentCreation: Math.floor((baseInterest - 20) * (1 + (seed % 40) / 100)),
+      reviewVolume: Math.floor((baseInterest - 5) * (0.8 + (seed % 25) / 100)),
+      productLaunchMentions: Math.floor((10 + i * 5) * (1 + (seed % 15) / 100)),
+      marketBuzzIndex: Math.floor((baseInterest - 8) * (0.9 + (seed % 18) / 100)),
     };
   });
 
@@ -350,7 +353,9 @@ export async function generateIntelligenceForKeyword(keyword: string): Promise<S
           { category: "Serums", percentage: 50 },
           { category: "Cleansers", percentage: 30 },
           { category: "Sunscreens", percentage: 20 },
-        ]
+        ],
+        pricePositioning: 55,
+        brandVisibility: 72
       },
       {
         id: "comp2_skin",
@@ -364,7 +369,9 @@ export async function generateIntelligenceForKeyword(keyword: string): Promise<S
           { category: "Moisturizers", percentage: 40 },
           { category: "Sunscreens", percentage: 40 },
           { category: "Serums", percentage: 20 },
-        ]
+        ],
+        pricePositioning: 68,
+        brandVisibility: 65
       },
       {
         id: "comp3_skin",
@@ -377,7 +384,9 @@ export async function generateIntelligenceForKeyword(keyword: string): Promise<S
         productDistribution: [
           { category: "Face Care", percentage: 60 },
           { category: "Body Care", percentage: 40 },
-        ]
+        ],
+        pricePositioning: 42,
+        brandVisibility: 58
       }
     ];
   } else {
@@ -395,7 +404,9 @@ export async function generateIntelligenceForKeyword(keyword: string): Promise<S
           { category: "Vitamins/Minerals", percentage: 45 },
           { category: "Sports Nutrition", percentage: 45 },
           { category: "Ayurveda", percentage: 10 },
-        ]
+        ],
+        pricePositioning: 35,
+        brandVisibility: 88
       },
       {
         id: "comp2_supp",
@@ -408,7 +419,9 @@ export async function generateIntelligenceForKeyword(keyword: string): Promise<S
         productDistribution: [
           { category: "Effervescent Tubes", percentage: 70 },
           { category: "Powders", percentage: 30 },
-        ]
+        ],
+        pricePositioning: 58,
+        brandVisibility: 62
       },
       {
          id: "comp3_supp",
@@ -421,7 +434,9 @@ export async function generateIntelligenceForKeyword(keyword: string): Promise<S
          productDistribution: [
            { category: "Tablets", percentage: 80 },
            { category: "Gummies", percentage: 20 },
-         ]
+         ],
+         pricePositioning: 28,
+         brandVisibility: 51
        }
     ];
   }

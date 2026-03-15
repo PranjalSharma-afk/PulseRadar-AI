@@ -13,6 +13,8 @@ import { TrendScoringFramework } from "@/components/TrendScoringFramework";
 import { CompetitorIntelligence } from "@/components/CompetitorIntelligence";
 import { TrendMomentumRadar } from "@/components/TrendMomentumRadar";
 import { StartupOpportunityGenerator } from "@/components/StartupOpportunityGenerator";
+import { AdvancedCharts } from "@/components/AdvancedCharts";
+import { CompetitorPositioningChart } from "@/components/CompetitorPositioningChart";
 
 export function SearchClientPage({ result, query }: { result: SearchResult; query: string }) {
   if (!result.isValid) {
@@ -247,6 +249,16 @@ export function SearchClientPage({ result, query }: { result: SearchResult; quer
              </div>
           )}
 
+          {/* 5b. Advanced Analytics Panels */}
+          <div className="border-t border-slate-100">
+            <AdvancedCharts
+              keyword={report.keyword}
+              entityType={report.type}
+              concepts={report.concepts}
+              competitors={report.competitors}
+            />
+          </div>
+
           {/* 6. Trend Momentum Radar */}
           <div className="border-t border-slate-100">
              <TrendMomentumRadar concepts={report.concepts} />
@@ -255,6 +267,11 @@ export function SearchClientPage({ result, query }: { result: SearchResult; quer
           {/* 7. Competitor Intelligence */}
           <div className="border-t border-slate-100 mt-10">
             <CompetitorIntelligence competitors={report.competitors} keyword={report.keyword} />
+          </div>
+
+          {/* 7b. Competitor Positioning Chart */}
+          <div className="border-t border-slate-100">
+            <CompetitorPositioningChart competitors={report.competitors} keyword={report.keyword} />
           </div>
 
           {/* 8. Startup Opportunity Generator */}
