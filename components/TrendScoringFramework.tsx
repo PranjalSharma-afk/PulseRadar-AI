@@ -1,11 +1,13 @@
-export function TrendScoringFramework() {
+import { TrendSignal } from "@/lib/types";
+
+export function TrendScoringFramework({ trendScore }: { trendScore?: TrendSignal }) {
   const categories = [
     {
       id: "search-velocity",
       label: "Search velocity",
       description:
         "Rate of change in high-intent searches across Google and marketplaces, normalised for category size.",
-      value: 88,
+      value: trendScore ? Math.min(100, trendScore.searchGrowth) : 88,
       tone: "sky" as const
     },
     {
@@ -13,7 +15,7 @@ export function TrendScoringFramework() {
       label: "Conversation momentum",
       description:
         "Depth and frequency of discussions across Reddit, Twitter, and community forums.",
-      value: 82,
+      value: trendScore ? Math.min(100, trendScore.socialGrowth) : 82,
       tone: "fuchsia" as const
     },
     {
@@ -21,7 +23,7 @@ export function TrendScoringFramework() {
       label: "Demand gap",
       description:
         "Mismatch between consumer demand and available supply or SKU variety in India.",
-      value: 91,
+      value: trendScore ? Math.min(100, Math.round(trendScore.score * 10)) : 91,
       tone: "emerald" as const
     },
     {
@@ -29,7 +31,9 @@ export function TrendScoringFramework() {
       label: "Competition density",
       description:
         "Number of credible players, SKU spread, and pricing compression in the category.",
-      value: 36,
+      value: trendScore 
+        ? (trendScore.competition === 'High' ? 85 : trendScore.competition === 'Moderate' ? 55 : 25) 
+        : 36,
       tone: "amber" as const
     }
   ];

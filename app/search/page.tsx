@@ -1,0 +1,19 @@
+import { generateIntelligenceForKeyword } from "@/lib/intelligence";
+import { SearchClientPage } from "./SearchClientPage";
+import { redirect } from "next/navigation";
+
+export default async function SearchPage(props: {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>
+}) {
+  const searchParams = await props.searchParams;
+  const query = typeof searchParams.q === 'string' ? searchParams.q : undefined;
+
+  if (!query) {
+    redirect("/");
+  }
+
+  // Generate the AI intelligence report for the requested phrase
+  const report = await generateIntelligenceForKeyword(query);
+
+  return <SearchClientPage report={report} query={query} />;
+}

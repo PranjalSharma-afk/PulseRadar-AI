@@ -1,6 +1,8 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 type HeroProps = {
   onExploreRadar: () => void;
@@ -15,6 +17,15 @@ const exampleTrends = [
 ];
 
 export function HeroSection({ onExploreRadar, onShowBriefs }: HeroProps) {
+  const [searchQuery, setSearchQuery] = useState("");
+  const router = useRouter();
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!searchQuery.trim()) return;
+    router.push(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
+  };
+
   return (
     <section className="relative mx-auto grid max-w-6xl grid-cols-1 lg:grid-cols-2 items-center gap-10 px-6 pt-24 pb-16 lg:pt-32 lg:pb-20 min-h-screen lg:min-h-[90vh]">
       {/* Left: Text Content */}
@@ -39,33 +50,68 @@ export function HeroSection({ onExploreRadar, onShowBriefs }: HeroProps) {
           <span className="block text-slate-400">₹100Cr Product.</span>
         </motion.h1>
 
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2, duration: 0.7 }}
+          className="max-w-md"
+        >
+          <form 
+            onSubmit={handleSearch}
+            className="flex items-center gap-2 rounded-2xl bg-white p-2 shadow-[0_8px_30px_rgb(0,0,0,0.08)] border border-slate-100 ring-1 ring-black/5 focus-within:ring-2 focus-within:ring-black/20 focus-within:border-black/20 transition-all"
+          >
+            <div className="flex-1 relative">
+              <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4">
+                <svg className="h-5 w-5 text-slate-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                  <path fillRule="evenodd" d="M9 3.5a5.5 5.5 0 100 11 5.5 5.5 0 000-11zM2 9a7 7 0 1112.452 4.391l3.328 3.329a.75.75 0 11-1.06 1.06l-3.329-3.328A7 7 0 012 9z" clipRule="evenodd" />
+                </svg>
+              </div>
+              <input
+                type="text"
+                name="q"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="block w-full rounded-xl border-0 py-3.5 pl-11 pr-4 text-slate-900 placeholder:text-slate-400 focus:ring-0 sm:text-sm sm:leading-6 bg-transparent outline-none font-medium"
+                placeholder="Search companies, ingredients (e.g. Magnesium)"
+                autoComplete="off"
+              />
+            </div>
+            <button
+              type="submit"
+              className="flex shrink-0 items-center justify-center rounded-xl bg-black px-5 py-3.5 text-sm font-bold tracking-wide text-white transition-transform hover:scale-105 active:scale-95 shadow-md"
+            >
+              Analyze
+            </button>
+          </form>
+        </motion.div>
+
         <motion.p
           className="text-base font-medium leading-relaxed text-slate-500 sm:text-lg max-w-md"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2, duration: 0.7 }}
+          transition={{ delay: 0.15, duration: 0.7 }}
         >
           PulseRadar AI maps search signals, consumer buzz, and market whitespace
           to find wellness trends months before they scale.
         </motion.p>
 
         <motion.div
-          className="flex flex-wrap items-center gap-4"
+          className="flex flex-wrap items-center gap-4 pt-2"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3, duration: 0.7 }}
         >
           <button
             onClick={onExploreRadar}
-            className="flex items-center justify-center gap-2 rounded-xl bg-black px-7 py-3.5 text-sm font-bold uppercase tracking-wider text-white transition-transform hover:scale-105 active:scale-95"
+            className="flex items-center justify-center gap-2 rounded-xl border-2 border-slate-200 bg-white px-6 py-3 text-xs font-bold uppercase tracking-wider text-slate-600 transition-colors hover:border-black hover:bg-slate-50 hover:text-black active:bg-slate-100"
           >
-            Explore Radar
+            Explore Live Radar
           </button>
           <button
             onClick={onShowBriefs}
-            className="flex items-center justify-center gap-2 rounded-xl border-2 border-slate-200 bg-white px-7 py-3.5 text-sm font-bold uppercase tracking-wider text-black transition-colors hover:border-black hover:bg-slate-50 active:bg-slate-100"
+            className="flex items-center justify-center gap-2 rounded-xl border-2 border-slate-200 bg-white px-6 py-3 text-xs font-bold uppercase tracking-wider text-slate-600 transition-colors hover:border-black hover:bg-slate-50 hover:text-black active:bg-slate-100"
           >
-            See Briefs
+            See AI Briefs
           </button>
         </motion.div>
 

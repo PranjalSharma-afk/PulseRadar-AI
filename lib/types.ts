@@ -37,3 +37,48 @@ export type PainPointInsight = {
   insightSummary: string;
 };
 
+export type CompetitorProfile = {
+  id: string;
+  name: string;
+  shortDescription: string;
+  mainCategory: string;
+  overview: string;
+  productsOffered: string[];
+  positioning: string;
+  productDistribution: { category: string; percentage: number }[];
+};
+
+export type IntelligenceReport = {
+  keyword: string;
+  type: "company" | "product" | "ingredient" | "unknown";
+  
+  // Section A
+  analysis: {
+    overview: string;
+    marketRelevance: string;
+    opportunity: string; // Emerging opportunities / Product opportunity
+    categoryInsights: string; // Industry relevance
+    consumerDemandSignals: string; // Use cases
+  };
+
+  // Section B
+  dashboardMetrics: {
+    opportunityScore: number;
+    growthPotential: number; // percentage
+    searchMomentum: number; // percentage
+    demandSignals: string;
+  };
+
+  // Feature 3
+  competitors: CompetitorProfile[];
+
+  // Feature 4
+  painPoints: PainPointInsight[];
+
+  // Feature 5
+  trendScore: TrendSignal;
+
+  // For charts
+  timeSeries: TrendTimepoint[];
+};
+
