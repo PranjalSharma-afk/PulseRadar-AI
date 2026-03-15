@@ -1,10 +1,11 @@
 "use client";
 
+import { useState } from "react";
 import { AnimatedBackground } from "@/components/AnimatedBackground";
 import { AppFooter } from "@/components/AppFooter";
 import { Logo } from "@/components/Logo";
-import { IntelligenceReport } from "@/lib/types";
-import { motion } from "framer-motion";
+import { SearchResult } from "@/lib/types";
+import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { PainPointIntelligence } from "@/components/PainPointIntelligence";
 import { TrendSignalGraph } from "@/components/TrendSignalGraph";
@@ -12,9 +13,55 @@ import { TrendScoringFramework } from "@/components/TrendScoringFramework";
 import { CompetitorIntelligence } from "@/components/CompetitorIntelligence";
 import { TrendMomentumRadar } from "@/components/TrendMomentumRadar";
 
-export function SearchClientPage({ report, query }: { report: IntelligenceReport; query: string }) {
+export function SearchClientPage({ result, query }: { result: SearchResult; query: string }) {
+  if (!result.isValid) {
+    return (
+      <main className="min-h-[80vh] bg-white flex items-center justify-center p-6">
+        <motion.div 
+          className="max-w-xl w-full text-center flex flex-col items-center"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+        >
+          <div className="h-16 w-16 rounded-2xl bg-slate-50 border border-slate-100 flex items-center justify-center text-3xl shadow-sm mb-6">
+            🔍
+          </div>
+          
+          <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight mb-3">
+            No relevant product, ingredient, or company found.
+          </h1>
+          
+          <p className="text-slate-500 font-medium mb-10 max-w-sm">
+            PulseRadar AI only analyzes search domains related to registered companies, verified FMCG products, and health ingredients.
+          </p>
+
+          <div className="w-full bg-slate-50 border border-slate-100 rounded-3xl p-8 mb-8 text-left">
+            <h3 className="text-sm font-bold text-slate-400 uppercase tracking-widest mb-4">Did you mean</h3>
+            <div className="flex flex-wrap gap-2">
+               {result.suggestions.map((sug) => (
+                 <Link href={`/search?q=${encodeURIComponent(sug)}`} key={sug}>
+                   <span className="inline-flex items-center justify-center px-4 py-2 rounded-xl border border-sky-100 bg-sky-50 text-sky-700 text-sm font-bold hover:bg-sky-100 transition-colors cursor-pointer">
+                     {sug} &rarr;
+                   </span>
+                 </Link>
+               ))}
+            </div>
+          </div>
+
+          <Link href="/">
+             <button className="h-12 px-6 rounded-2xl bg-black text-white text-sm font-bold hover:bg-gray-800 transition-colors shadow-[0_10px_25px_-5px_rgba(0,0,0,0.1),0_8px_10px_-6px_rgba(0,0,0,0.1)]">
+               Return Home
+             </button>
+          </Link>
+        </motion.div>
+      </main>
+    );
+  }
+
+  const { report } = result;
+
   return (
-    <main className="relative min-h-screen text-slate-900">
+    <main className="min-h-screen bg-white">
       <AnimatedBackground />
       <div className="relative z-10 flex min-h-screen flex-col">
         <header className="sticky top-0 z-20 border-b border-black/5 bg-white/80 backdrop-blur-xl">

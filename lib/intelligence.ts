@@ -1,4 +1,4 @@
-import { IntelligenceReport, CompetitorProfile, TrendSignal, TrendTimepoint, PainPointInsight, TrendConcept } from "./types";
+import { IntelligenceReport, CompetitorProfile, TrendSignal, TrendTimepoint, PainPointInsight, TrendConcept, SearchResult } from "./types";
 
 /**
  * Heuristic to guess the intent of the keyword.
@@ -112,18 +112,109 @@ function generateDynamicPainPoints(keyword: string, type: "company" | "product" 
       quotes: [
         `"Is this ${keyword} actually pure? It's so hard to tell from the packaging and the brand's website is vague."`,
         `"Bought ${keyword} based on the hype, but figuring out how to actually use it correctly took me hours of reading Reddit."`
-      ]
+        ]
+      }
+    ];
+}
+
+const VALID_DOMAINS = [
+  "magnesium", "ashwagandha", "protein powder", "creatine", "collagen",
+  "minimalist", "mamaearth", "nykaa", "sugar cosmetics", "plum", "mCaffeine",
+  "protein bar", "electrolyte drink", "kombucha", "matcha", "bcaa",
+  "curcumin", "vitamin c", "hyaluronic acid", "retinol", "niacinamide",
+  "sleep supplement", "energy drink", "meal replacement", "multivitamin",
+  "whey protein", "plant protein", "gummies", "skincare", "haircare", "supplements"
+];
+
+// Helper to calculate Levenshtein distance for typos
+function getEditDistance(a: string, b: string): number {
+  if (a.length === 0) return b.length;
+  if (b.length === 0) return a.length;
+
+  const matrix = [];
+
+  for (let i = 0; i <= b.length; i++) {
+    matrix[i] = [i];
+  }
+
+  for (let j = 0; j <= a.length; j++) {
+    matrix[0][j] = j;
+  }
+
+  for (let i = 1; i <= b.length; i++) {
+    for (let j = 1; j <= a.length; j++) {
+      if (b.charAt(i - 1) === a.charAt(j - 1)) {
+        matrix[i][j] = matrix[i - 1][j - 1];
+      } else {
+        matrix[i][j] = Math.min(
+          matrix[i - 1][j - 1] + 1, // substitution
+          Math.min(
+            matrix[i][j - 1] + 1,   // insertion
+            matrix[i - 1][j] + 1    // deletion
+          )
+        );
+      }
     }
-  ];
+  }
+
+  return matrix[b.length][a.length];
+}
+
+/**
+ * Validates the search query against known domains. 
+ * Returns true if valid. If invalid, returns suggestions.
+ */
+function validateSearchQuery(keyword: string): { isValid: boolean, suggestions: string[] } {
+  const normalized = keyword.toLowerCase().trim();
+  
+  // Exact or partial strict match
+  if (VALID_DOMAINS.some(domain => normalized.includes(domain) || domain.includes(normalized))) {
+    return { isValid: true, suggestions: [] };
+  }
+
+  // Spell correct / distance matching
+  const suggestions: { word: string, dist: number }[] = [];
+  
+  for (const domain of VALID_DOMAINS) {
+    const dist = getEditDistance(normalized, domain);
+    // If it's a very close typo (e.g. Magnesuim -> Magnesium), collect it
+    if (dist <= 3) {
+      suggestions.push({ word: domain, dist });
+    }
+  }
+
+  suggestions.sort((a, b) => a.dist - b.dist);
+
+  let defaultSuggestions = ["Magnesium", "Ashwagandha", "Protein Powder"];
+  let finalSuggestions = suggestions.map(s => s.word.charAt(0).toUpperCase() + s.word.slice(1));
+  
+  if (finalSuggestions.length === 0) {
+     finalSuggestions = defaultSuggestions;
+  } else {
+     // Ensure we provide at least one default if spellcheck only caught 1
+     if (finalSuggestions.length < 3) finalSuggestions = [...finalSuggestions, ...defaultSuggestions].slice(0, 3);
+  }
+
+  return { isValid: false, suggestions: finalSuggestions.slice(0, 3) };
 }
 
 /**
  * Generates a mock AI intelligence report for the given keyword.
  * In a real app, this would call an LLM API (like GPT-4) or a specialized backend.
  */
-export async function generateIntelligenceForKeyword(keyword: string): Promise<IntelligenceReport> {
-  // Simulate network delay
-  await new Promise(resolve => setTimeout(resolve, 800));
+export async function generateIntelligenceForKeyword(keyword: string): Promise<SearchResult> {
+  // Simulate network delay for realistic loading skeleton feeling in Next.js
+  await new Promise((resolve) => setTimeout(resolve, 800 + Math.random() * 600));
+
+  const validation = validateSearchQuery(keyword);
+
+  if (!validation.isValid) {
+     return {
+        isValid: false,
+        query: keyword,
+        suggestions: validation.suggestions
+     };
+  }
 
   const type = classifyKeyword(keyword);
   const capitalizedKeyword = keyword.charAt(0).toUpperCase() + keyword.slice(1);
@@ -239,25 +330,28 @@ export async function generateIntelligenceForKeyword(keyword: string): Promise<I
   ];
 
   return {
-    keyword: capitalizedKeyword,
-    type,
-    analysis: {
-      overview: `Comprehensive analysis indicates that ${capitalizedKeyword} is experiencing a surge in consumer interest across D2C channels in India.`,
-      marketRelevance: `${capitalizedKeyword} aligns perfectly with the current macro trend towards preventative healthcare and functional nutrition.`,
-      opportunity: `Significant whitespace exists in premium formats (like gummies or effervescent tablets) for ${capitalizedKeyword}.`,
-      categoryInsights: `The ${type} category is currently expanding at ~${searchGrowth}% YoY.`,
-      consumerDemandSignals: `Social listening indicates strong demand for "better tasting" and "more effective" ${capitalizedKeyword} products.`
-    },
-    dashboardMetrics: {
-      opportunityScore: parseFloat(opportunityScore.toFixed(1)),
-      growthPotential: searchGrowth + 12,
-      searchMomentum: searchGrowth,
-      demandSignals: opportunityScore > 8 ? "Very Strong" : "Strong"
-    },
-    competitors,
-    painPoints,
-    trendScore,
-    concepts,
-    timeSeries
+    isValid: true,
+    report: {
+      keyword: capitalizedKeyword,
+      type,
+      analysis: {
+        overview: `Comprehensive analysis indicates that ${capitalizedKeyword} is experiencing a surge in consumer interest across D2C channels in India.`,
+        marketRelevance: `${capitalizedKeyword} aligns perfectly with the current macro trend towards preventative healthcare and functional nutrition.`,
+        opportunity: `Significant whitespace exists in premium formats (like gummies or effervescent tablets) for ${capitalizedKeyword}.`,
+        categoryInsights: `The ${type} category is currently expanding at ~${searchGrowth}% YoY.`,
+        consumerDemandSignals: `Social listening indicates strong demand for "better tasting" and "more effective" ${capitalizedKeyword} products.`
+      },
+      dashboardMetrics: {
+        opportunityScore: parseFloat(opportunityScore.toFixed(1)),
+        growthPotential: searchGrowth + 12,
+        searchMomentum: searchGrowth,
+        demandSignals: opportunityScore > 8 ? "Very Strong" : "Strong"
+      },
+      competitors,
+      painPoints,
+      trendScore,
+      concepts,
+      timeSeries
+    }
   };
 }

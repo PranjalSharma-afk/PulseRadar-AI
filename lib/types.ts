@@ -94,3 +94,14 @@ export type IntelligenceReport = {
   timeSeries: TrendTimepoint[];
 };
 
+export type SearchResult = 
+  | {
+      isValid: true;
+      report: IntelligenceReport;
+    }
+  | {
+      isValid: false;
+      query: string;
+      suggestions: string[];
+    };
+
