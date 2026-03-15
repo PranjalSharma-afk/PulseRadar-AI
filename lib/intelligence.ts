@@ -7,7 +7,7 @@ function classifyKeyword(keyword: string): "company" | "product" | "ingredient" 
   const lower = keyword.toLowerCase();
   
   const companyKeywords = ["wellness", "himalaya", "nykaa", "mamaearth", "healthkart", "curefit", "boldfit", "minimalist", "plum", "derma", "dot", "bodywise", "mosaic", "sugar"];
-  const ingredientKeywords = ["magnesium", "protein", "ashwagandha", "moss", "collagen", "moringa", "vitamin", "zinc", "curcumin", "shilajit", "creatine", "retinol", "niacinamide", "hyaluronic", "melatonin", "bcaa"];
+  const ingredientKeywords = ["magnesium", "protein", "ashwagandha", "moss", "collagen", "moringa", "vitamin", "zinc", "curcumin", "shilajit", "creatine", "retinol", "niacinamide", "hyaluronic", "melatonin", "bcaa", "latte"];
   
   if (companyKeywords.some(k => lower.includes(k))) return "company";
   if (ingredientKeywords.some(k => lower.includes(k))) return "ingredient";
@@ -124,7 +124,8 @@ const VALID_DOMAINS = [
   "curcumin", "vitamin c", "hyaluronic acid", "retinol", "niacinamide", "zinc",
   "sleep supplement", "energy drink", "meal replacement", "multivitamin",
   "whey protein", "plant protein", "gummies", "skincare", "haircare", "supplements",
-  "mosaic wellness", "man matters", "be bodywise", "healthkart", "fast&up", "carbamide forte"
+  "mosaic wellness", "man matters", "be bodywise", "healthkart", "fast&up", "carbamide forte",
+  "sea moss", "magnesium glycinate", "moringa gummies", "ashwagandha lattes"
 ];
 
 const CONCEPT_SYNONYMS: Record<string, string[]> = {
