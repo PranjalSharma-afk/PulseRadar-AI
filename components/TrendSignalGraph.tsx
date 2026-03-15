@@ -32,46 +32,42 @@ function enrich(raw: TrendTimepoint[]): TrendTimepoint[] {
       reviewVolume:          pt.reviewVolume          ?? Math.floor(base * 0.85 + i * 3),
       productLaunchMentions: pt.productLaunchMentions ?? Math.floor(10 + i * 6),
       marketBuzzIndex:       pt.marketBuzzIndex       ?? Math.floor(base * 0.9 - 5 + i * 4),
+      socialVolume:          pt.socialVolume          ?? Math.floor(base * 1.1 + i * 2),
+      contentCreation:       pt.contentCreation       ?? Math.floor(base * 0.7 + i * 5),
     };
   });
 }
 
 /**
- * Convert a YYYY-MM string (from <input type="month">) to an absolute quarter number.
- * e.g. "2025-01" → 8101, "2025-06" → 8102, "2026-04" → 8105
+ * Convert a YYYY-MM string (from <input type="month">) to an absolute month number.
  */
-function ymToQNum(ym: string): number {
+function ymToMonthNum(ym: string): number {
   const [y, m] = ym.split("-").map(Number);
-  return y * 4 + Math.ceil(m / 3);
+  return y * 12 + m;
 }
 
 /**
- * Convert any month label from the series data to an absolute quarter number.
- * Handles "Q1 2025", "Jan 2025", "Apr 2024", raw month names like "Apr", etc.
- * Falls back to index-based value if unparseable.
+ * Convert any month label from the series data to an absolute month number.
  */
-function labelToQNum(label: string, fallbackIdx: number): number {
-  // "Qn YYYY"
-  const qm = label.match(/Q(\d)\s+(\d{4})/);
-  if (qm) return parseInt(qm[2]) * 4 + parseInt(qm[1]);
-
-  // "MonthName YYYY"
+function labelToMonthNum(label: string, fallbackIdx: number): number {
   const MONTHS = ["jan","feb","mar","apr","may","jun","jul","aug","sep","oct","nov","dec"];
+  
+  // "MonthName YYYY"
   const mym = label.match(/([A-Za-z]{3,})\s+(\d{4})/i);
   if (mym) {
     const mi = MONTHS.indexOf(mym[1].toLowerCase().slice(0, 3));
-    if (mi >= 0) return parseInt(mym[2]) * 4 + Math.ceil((mi + 1) / 3);
+    if (mi >= 0) return parseInt(mym[2]) * 12 + mi + 1;
   }
 
+  // "Qn YYYY"
+  const qm = label.match(/Q(\d)\s+(\d{4})/);
+  if (qm) return parseInt(qm[2]) * 12 + (parseInt(qm[1]) - 1) * 3 + 2;
+
   // "YYYY-MM"
-  if (/^\d{4}-\d{2}$/.test(label)) return ymToQNum(label);
+  if (/^\d{4}-\d{2}$/.test(label)) return ymToMonthNum(label);
 
-  // Bare month name without year — use a baseline of 2025 + fallback index as quarter
-  const mi = MONTHS.indexOf(label.toLowerCase().slice(0, 3));
-  if (mi >= 0) return 2025 * 4 + Math.ceil((mi + 1) / 3);
-
-  // Pure fallback: treat as sequential index from Q1 2025
-  return 2025 * 4 + 1 + fallbackIdx;
+  // Pure fallback: treat as sequential index from Jan 2025
+  return 2025 * 12 + 1 + fallbackIdx;
 }
 
 export function TrendSignalGraph({ selectedTrend, series }: Props) {
@@ -91,16 +87,16 @@ export function TrendSignalGraph({ selectedTrend, series }: Props) {
       case "3Y":
       case "ALL": return enriched;
       case "Custom": {
-        const lo = ymToQNum(startM);
-        const hi = ymToQNum(endM);
+        const lo = ymToMonthNum(startM);
+        const hi = ymToMonthNum(endM);
         const result = enriched.filter((pt, i) => {
-          const qi = labelToQNum(pt.month, i);
+          const qi = labelToMonthNum(pt.month, i);
           return qi >= lo && qi <= hi;
         });
         // Safety: if filter fails (data in unparseable format), fall back to all points between indices
         if (result.length === 0 && enriched.length > 0) {
           // Estimate which proportion of the series the date range covers
-          const seriesQNums = enriched.map((pt, i) => labelToQNum(pt.month, i));
+          const seriesQNums = enriched.map((pt, i) => labelToMonthNum(pt.month, i));
           const minQ = Math.min(...seriesQNums);
           const maxQ = Math.max(...seriesQNums);
           const total = maxQ - minQ || 1;

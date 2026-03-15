@@ -40,7 +40,7 @@ export function PainPointIntelligence({ insights }: Props) {
                 </figure>
               ))}
             </div>
-            <div className="rounded-xl border border-emerald-100 bg-emerald-50/50 p-5 p-3 text-xs text-slate-100">
+            <div className="rounded-xl border border-emerald-100 bg-emerald-50/50 p-5">
               <p className="mb-2 text-[10px] font-bold uppercase tracking-widest text-emerald-600">
                 AI Insight
               </p>

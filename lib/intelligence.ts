@@ -477,9 +477,9 @@ export async function generateIntelligenceForKeyword(keyword: string): Promise<S
     // Supplements / Health format library filters out invalid things like "Coffee"
     concepts = [
       { id: "c1", name: `${capitalizedKeyword} Sleep Gummies`, explanation: `Adaptogenic supplement combining ${capitalizedKeyword} with sleep support complexes inside a gummy format.`, demand: 85, growth: 92, targetSegment: "Insomniacs, Stressed Professionals", opportunityLevel: "High" },
-      { id: "c2", name: `${capitalizedKeyword} Hydration Powders`, explanation: `Effervescent or powdered electrolytes heavily fortified with ${capitalizedKeyword}.`, demand: 35, growth: 88, targetSegment: "Athletes, Fitness Enthusiasts", opportunityLevel: "High" },
-      { id: "c3", name: `${capitalizedKeyword} Standard Capsules`, explanation: `Generic single-ingredient ${capitalizedKeyword} delivery payload via standardized gelatin or veg capsules.`, demand: 90, growth: 25, targetSegment: "General Wellness", opportunityLevel: "Low" },
-      { id: "c4", name: `${capitalizedKeyword} Liquid Extracts`, explanation: `Sublingual drops formulated for rapid bloodstream absorption and high bioavailability.`, demand: 20, growth: 30, targetSegment: "Biohackers, Fast Absorption", opportunityLevel: "Medium" },
+      { id: "c2", name: `${capitalizedKeyword} Standard Capsules`, explanation: `Generic single-ingredient ${capitalizedKeyword} delivery payload via standardized gelatin or veg capsules.`, demand: 90, growth: 25, targetSegment: "General Wellness", opportunityLevel: "Low" },
+      { id: "c3", name: `${capitalizedKeyword} Powder Mix`, explanation: `Effervescent or powdered mixes fortified with ${capitalizedKeyword}.`, demand: 35, growth: 88, targetSegment: "Athletes, Fitness Enthusiasts", opportunityLevel: "High" },
+      { id: "c4", name: `${capitalizedKeyword} Herbal Tea`, explanation: `Herbal tea infusions formulated for rapid absorption and relaxation.`, demand: 20, growth: 30, targetSegment: "Biohackers, Fast Absorption", opportunityLevel: "Medium" },
       { id: "c5", name: `${capitalizedKeyword} Stress Support Blends`, explanation: `Multi-ingredient functional blends primarily anchored by clinical doses of ${capitalizedKeyword}.`, demand: 55, growth: 75, targetSegment: "Anxiety, Mental Health", opportunityLevel: "Medium" }
     ];
 

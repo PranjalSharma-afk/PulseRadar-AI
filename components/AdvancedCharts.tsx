@@ -46,6 +46,22 @@ function densityColor(v: number) {
   return "#bbf7d0";
 }
 
+function CustomXAxisTick({ x, y, payload }: any) {
+  if (!payload || !payload.value) return null;
+  const words = payload.value.split(" ");
+  const line1 = words.length > 2 ? words.slice(0, 2).join(" ") : words[0];
+  const line2 = words.length > 2 ? words.slice(2).join(" ") : words.slice(1).join(" ");
+  
+  return (
+    <g transform={`translate(${x},${y})`}>
+      <text x={0} y={0} dy={12} textAnchor="middle" fill="#64748b" fontSize={9} fontWeight={800} letterSpacing={0.5}>
+        <tspan x={0} dy="0">{line1}</tspan>
+        {line2 && <tspan x={0} dy="12">{line2}</tspan>}
+      </text>
+    </g>
+  );
+}
+
 // ── ChartCard wrapper ──────────────────────────────────────────────────────
 
 function ChartCard({ title, subtitle, children }: { title: string; subtitle: string; children: React.ReactNode }) {
@@ -128,13 +144,13 @@ export function AdvancedCharts({ keyword, concepts = [], timeSeries = [] }: Prop
         {/* 1 · Demand Distribution */}
         <ChartCard title="Demand Distribution" subtitle="Units of demand per product format">
           {demandData.length > 0 ? (
-            <div className="h-56">
+            <div className="h-56 mt-2">
               <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={demandData} margin={{ left: -20, top: 10 }}>
-                  <XAxis dataKey="name" tick={{ fontSize: 10, fontWeight: 700 }} tickLine={false} axisLine={false} />
+                <BarChart data={demandData} margin={{ left: -20, right: 10, top: 10, bottom: 20 }}>
+                  <XAxis dataKey="name" interval={0} tick={<CustomXAxisTick />} tickLine={false} axisLine={false} />
                   <YAxis tick={{ fontSize: 10, fontWeight: 700 }} tickLine={false} axisLine={false} />
                   <Tooltip contentStyle={{ borderRadius: 12, border: "1px solid #e2e8f0", fontWeight: "bold", fontSize: 12 }} />
-                  <Bar dataKey="demand" radius={[8, 8, 0, 0]} fill="#0ea5e9">
+                  <Bar dataKey="demand" radius={[8, 8, 0, 0]} fill="#0ea5e9" maxBarSize={50}>
                     <LabelList dataKey="demand" position="top" style={{ fontSize: 10, fontWeight: 800 }} />
                   </Bar>
                 </BarChart>
