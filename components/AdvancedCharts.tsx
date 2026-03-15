@@ -63,9 +63,15 @@ function ChartCard({ title, subtitle, children }: { title: string; subtitle: str
 export function AdvancedCharts({ keyword, concepts = [], timeSeries = [] }: Props) {
   const s = seedNum(keyword);
 
+  // Number of words in the keyword — used to cleanly strip the keyword prefix from concept names
+  // e.g. keyword="Magnesium" → 1 word, keyword="Mosaic Wellness" → 2 words
+  const kwWordCount = keyword.trim().split(/\s+/).length;
+  const stripKeyword = (name: string) =>
+    name.split(" ").slice(kwWordCount).join(" ") || name;
+
   // 1. Demand distribution — use radar concepts or fallback
   const demandData = (concepts.length > 0 ? concepts.slice(0, 5) : []).map(c => ({
-    name: c.name.split(" ").slice(1).join(" ") || c.name,
+    name: stripKeyword(c.name),
     demand: c.demand,
   }));
 
@@ -77,7 +83,7 @@ export function AdvancedCharts({ keyword, concepts = [], timeSeries = [] }: Prop
     .sort((a, b) => b.growth - a.growth)
     .slice(0, 4)
     .map(c => ({
-      name: c.name.split(" ").slice(1).join(" ") || c.name,
+      name: stripKeyword(c.name),
       growth: c.growth,
     }));
 
