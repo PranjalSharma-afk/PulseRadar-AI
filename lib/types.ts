@@ -61,6 +61,11 @@ export type IntelligenceReport = {
   keyword: string;
   type: "company" | "product" | "ingredient" | "unknown";
   
+  visual?: {
+    url: string;
+    type: "logo" | "illustration" | null;
+  } | null;
+
   // Section A
   analysis: {
     overview: string;

@@ -64,8 +64,8 @@ export function TrendMomentumRadar({ concepts }: { concepts: TrendConcept[] }) {
              </span>
              Trend Momentum Radar
           </h2>
-          <p className="mt-4 text-sm font-medium text-slate-500 md:text-base">
-            Mapping emerging product concepts based on <span className="font-bold text-slate-800">current demand vs future growth</span>.
+          <p className="mt-4 text-sm font-medium text-slate-500 md:text-base max-w-2xl leading-relaxed">
+            Trend Momentum Radar maps product opportunities based on two dimensions: <span className="font-bold text-slate-800">Current Market Demand</span> and <span className="font-bold text-slate-800">Future Growth Momentum</span>. Concepts located in the top right quadrant represent <span className="font-bold text-slate-800">high demand and high growth opportunities</span>, while those in other quadrants represent emerging or saturated markets.
           </p>
         </div>
       </div>
@@ -130,7 +130,7 @@ export function TrendMomentumRadar({ concepts }: { concepts: TrendConcept[] }) {
                                      '#64748b'; // Gray for Low Opp
                     
                     return (
-                      <Cell key={`cell-${index}`} fill={dotColor} stroke="#ffffff" strokeWidth={2} className="transition-transform hover:scale-110" />
+                      <Cell key={`cell-${index}`} fill={dotColor} stroke="#ffffff" strokeWidth={2} />
                     )
                  })}
                </Scatter>

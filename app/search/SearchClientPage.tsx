@@ -88,128 +88,154 @@ export function SearchClientPage({ result, query }: { result: SearchResult; quer
         </header>
 
         <article className="flex-1 pb-20">
-          {/* Header Section */}
+          {/* Entry Overview & Visuals */}
           <section className="mx-auto max-w-6xl px-6 pt-16 pb-12">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
+              className="flex flex-col md:flex-row items-start gap-8"
             >
-              <div className="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1.5 text-[11px] font-bold uppercase tracking-widest text-emerald-700 shadow-sm mb-6">
-                <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
-                AI Generated Report
+              <div className="flex-1">
+                <div className="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1.5 text-[11px] font-bold uppercase tracking-widest text-emerald-700 shadow-sm mb-6">
+                  <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
+                  AI Generated Report
+                </div>
+                <h1 className="text-4xl font-extrabold tracking-tight text-black sm:text-5xl lg:text-6xl mb-4">
+                  Intelligence: <span className="text-slate-400">{report.keyword}</span>
+                </h1>
+                <p className="text-lg font-medium text-slate-500 max-w-2xl">
+                  Dynamic market signals, competitor analysis, and consumer buzz mapped for {query}.
+                </p>
               </div>
-              <h1 className="text-4xl font-extrabold tracking-tight text-black sm:text-5xl lg:text-6xl mb-4">
-                Intelligence: <span className="text-slate-400">{report.keyword}</span>
-              </h1>
-              <p className="text-lg font-medium text-slate-500 max-w-2xl">
-                Dynamic market signals, competitor analysis, and consumer buzz mapped for {query}.
-              </p>
+
+              {report.visual && (
+                <div className="md:mt-4 shrink-0 shadow-lg rounded-2xl overflow-hidden border-2 border-slate-100 bg-white p-2">
+                   {report.visual.type === 'logo' ? (
+                     <img 
+                       src={report.visual.url} 
+                       alt={`${report.keyword} Logo`} 
+                       className="w-24 h-24 object-contain rounded-xl bg-white" 
+                     />
+                   ) : (
+                     <img 
+                       src={report.visual.url} 
+                       alt={`${report.keyword} Illustration`} 
+                       className="w-32 h-32 object-cover rounded-xl" 
+                     />
+                   )}
+                </div>
+              )}
             </motion.div>
           </section>
 
-          {/* Section A & Section B - AI Analysis & Dashboard */}
-          <section className="mx-auto max-w-6xl px-6 py-6 border-t border-slate-100">
-             <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
-                {/* Section A: Keyword Analysis */}
-                <motion.div 
-                  className="lg:col-span-2 space-y-8"
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.6, delay: 0.2 }}
-                >
-                  <div>
-                    <h2 className="text-2xl font-extrabold tracking-tight text-black flex items-center gap-2">
-                       Market Context
-                    </h2>
-                    <div className="mt-6 flex flex-col gap-6 rounded-2xl border-2 border-slate-100 bg-white p-6 md:p-8 shadow-sm">
-                      <div className="grid gap-6">
-                        <div>
-                          <h3 className="text-[11px] font-bold uppercase tracking-widest text-slate-400 mb-2">Overview</h3>
-                          <p className="text-slate-700 font-medium leading-relaxed">{report.analysis.overview}</p>
-                        </div>
-                        <div className="grid sm:grid-cols-2 gap-6">
-                           <div>
-                            <h3 className="text-[11px] font-bold uppercase tracking-widest text-slate-400 mb-2">Market Relevance</h3>
-                            <p className="text-sm text-slate-600 font-medium leading-relaxed">{report.analysis.marketRelevance}</p>
-                           </div>
-                           <div>
-                            <h3 className="text-[11px] font-bold uppercase tracking-widest text-slate-400 mb-2">Opportunity</h3>
-                            <p className="text-sm text-slate-600 font-medium leading-relaxed">{report.analysis.opportunity}</p>
-                           </div>
-                           <div>
-                            <h3 className="text-[11px] font-bold uppercase tracking-widest text-slate-400 mb-2">Category Insights</h3>
-                            <p className="text-sm text-slate-600 font-medium leading-relaxed">{report.analysis.categoryInsights}</p>
-                           </div>
-                           <div>
-                            <h3 className="text-[11px] font-bold uppercase tracking-widest text-slate-400 mb-2">Demand Signals</h3>
-                            <p className="text-sm text-slate-600 font-medium leading-relaxed">{report.analysis.consumerDemandSignals}</p>
-                           </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </motion.div>
+          {/* Layout Structure ordered matching Update 7 requirements:
+              1. Entry Overview & Visuals (done above)
+              2. Market Context & Detailed Analysis
+              3. Consumer Pain Point Intelligence
+              4. Signal Strength Indicators (Metrics + Scoring Framework)
+              5. Trend Intelligence Graph
+              6. Trend Momentum Radar
+              7. Competitor Intelligence
+          */}
 
-                {/* Section B: Visualization Dashboard */}
-                <motion.div 
-                  className="space-y-6"
-                  initial={{ opacity: 0, x: 20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.6, delay: 0.3 }}
-                >
-                  <h2 className="text-2xl font-extrabold tracking-tight text-black">
-                     Signal Strength
-                  </h2>
-                  <div className="grid grid-cols-2 gap-4 mt-6">
-                     <div className="rounded-2xl border-2 border-slate-100 bg-white p-5 shadow-sm">
-                        <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Opportunity Score</p>
-                        <p className="mt-2 text-3xl font-black text-black">{report.dashboardMetrics.opportunityScore}<span className="text-sm text-slate-400 font-bold">/10</span></p>
+          {/* 2. Market Context & Detailed Analysis */}
+          <section className="mx-auto max-w-6xl px-6 py-6 border-t border-slate-100">
+             <motion.div 
+               className="w-full space-y-8"
+               initial={{ opacity: 0, y: 20 }}
+               animate={{ opacity: 1, y: 0 }}
+               transition={{ duration: 0.6, delay: 0.2 }}
+             >
+               <div>
+                 <h2 className="text-2xl font-extrabold tracking-tight text-black flex items-center gap-2">
+                    Market Context & Analysis
+                 </h2>
+                 <div className="mt-6 flex flex-col gap-6 rounded-2xl border-2 border-slate-100 bg-white p-6 md:p-8 shadow-sm">
+                   <div className="grid gap-6">
+                     <div>
+                       <h3 className="text-[11px] font-bold uppercase tracking-widest text-slate-400 mb-2">Overview</h3>
+                       <p className="text-slate-700 font-medium leading-relaxed">{report.analysis.overview}</p>
                      </div>
-                     <div className="rounded-2xl border-2 border-slate-100 bg-white p-5 shadow-sm">
-                        <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Growth Potential</p>
-                        <p className="mt-2 text-3xl font-black text-emerald-600">+{report.dashboardMetrics.growthPotential}%</p>
+                     <div className="grid md:grid-cols-4 gap-6">
+                        <div className="md:col-span-2">
+                         <h3 className="text-[11px] font-bold uppercase tracking-widest text-slate-400 mb-2">Market Relevance</h3>
+                         <p className="text-sm text-slate-600 font-medium leading-relaxed">{report.analysis.marketRelevance}</p>
+                        </div>
+                        <div className="md:col-span-2">
+                         <h3 className="text-[11px] font-bold uppercase tracking-widest text-slate-400 mb-2">Opportunity</h3>
+                         <p className="text-sm text-slate-600 font-medium leading-relaxed">{report.analysis.opportunity}</p>
+                        </div>
+                        <div className="md:col-span-2">
+                         <h3 className="text-[11px] font-bold uppercase tracking-widest text-slate-400 mb-2">Category Insights</h3>
+                         <p className="text-sm text-slate-600 font-medium leading-relaxed">{report.analysis.categoryInsights}</p>
+                        </div>
+                        <div className="md:col-span-2">
+                         <h3 className="text-[11px] font-bold uppercase tracking-widest text-slate-400 mb-2">Demand Signals</h3>
+                         <p className="text-sm text-slate-600 font-medium leading-relaxed">{report.analysis.consumerDemandSignals}</p>
+                        </div>
                      </div>
-                     <div className="rounded-2xl border-2 border-slate-100 bg-white p-5 shadow-sm">
-                        <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Search Momentum</p>
-                        <p className="mt-2 text-3xl font-black text-sky-600">+{report.dashboardMetrics.searchMomentum}%</p>
-                     </div>
-                     <div className="rounded-2xl border-2 border-slate-100 bg-white p-5 shadow-sm">
-                        <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Demand Signal</p>
-                        <p className="mt-2 text-xl font-black text-purple-600 leading-tight">{report.dashboardMetrics.demandSignals}</p>
-                     </div>
-                  </div>
-                </motion.div>
-             </div>
+                   </div>
+                 </div>
+               </div>
+             </motion.div>
           </section>
 
-          {/* New Feature: Trend Momentum Radar */}
-          <div className="border-t border-slate-100">
-             <TrendMomentumRadar concepts={report.concepts} />
+          {/* 3. Consumer Pain Point Intelligence */}
+          <div className="border-t border-slate-100 relative">
+             <PainPointIntelligence insights={report.painPoints} />
           </div>
 
-          {/* Feature 6 / Dynamic Trend Signal Graph */}
+          {/* 4. Signal Strength Indicators */}
+          <section className="mx-auto max-w-6xl px-6 py-12 border-t border-slate-100">
+             <motion.div 
+               className="space-y-6"
+               initial={{ opacity: 0, y: 20 }}
+               whileInView={{ opacity: 1, y: 0 }}
+               viewport={{ once: true }}
+               transition={{ duration: 0.6 }}
+             >
+               <h2 className="text-2xl font-extrabold tracking-tight text-black">
+                  Signal Strength Indicators
+               </h2>
+               <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6">
+                  <div className="rounded-2xl border-2 border-slate-100 bg-white p-5 shadow-sm">
+                     <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Opportunity Score</p>
+                     <p className="mt-2 text-3xl font-black text-black">{report.dashboardMetrics.opportunityScore}<span className="text-sm text-slate-400 font-bold">/10</span></p>
+                  </div>
+                  <div className="rounded-2xl border-2 border-slate-100 bg-white p-5 shadow-sm">
+                     <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Growth Potential</p>
+                     <p className="mt-2 text-3xl font-black text-emerald-600">+{report.dashboardMetrics.growthPotential}%</p>
+                  </div>
+                  <div className="rounded-2xl border-2 border-slate-100 bg-white p-5 shadow-sm">
+                     <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Search Momentum</p>
+                     <p className="mt-2 text-3xl font-black text-sky-600">+{report.dashboardMetrics.searchMomentum}%</p>
+                  </div>
+                  <div className="rounded-2xl border-2 border-slate-100 bg-white p-5 shadow-sm">
+                     <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Demand Signal</p>
+                     <p className="mt-2 text-xl font-black text-purple-600 leading-tight">{report.dashboardMetrics.demandSignals}</p>
+                  </div>
+               </div>
+               
+               <div className="mt-8">
+                 <TrendScoringFramework trendScore={report.trendScore} />
+               </div>
+             </motion.div>
+          </section>
+
+          {/* 5. Trend Intelligence Graph */}
           {report.timeSeries.length > 0 && (
              <div className="border-t border-slate-100 mt-10">
                <TrendSignalGraph selectedTrend={report.trendScore} series={report.timeSeries} />
              </div>
           )}
 
-          {/* Feature 4: Dynamic Pain Points */}
+          {/* 6. Trend Momentum Radar */}
           <div className="border-t border-slate-100">
-             <PainPointIntelligence insights={report.painPoints} />
+             <TrendMomentumRadar concepts={report.concepts} />
           </div>
 
-          {/* Feature 5: Dynamic Trend Scoring Framework */}
-          {/* Note: In a complete implementation we would pass the dynamic scores to the framework component.
-              Since TrendScoringFramework doesn't currently accept props, we render it as is, or we could pass the trendScore.
-              For this exercise, we keep it as requested to "Update the Trend Scoring Framework so that it is fully keyword driven."
-          */}
-          <div className="border-t border-slate-100 mt-10">
-            <TrendScoringFramework trendScore={report.trendScore} />
-          </div>
-
-          {/* Feature 3: Competitor Intelligence Section */}
+          {/* 7. Competitor Intelligence */}
           <div className="border-t border-slate-100 mt-10">
             <CompetitorIntelligence competitors={report.competitors} keyword={report.keyword} />
           </div>

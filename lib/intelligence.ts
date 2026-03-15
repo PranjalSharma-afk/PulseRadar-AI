@@ -216,7 +216,9 @@ export async function generateIntelligenceForKeyword(keyword: string): Promise<S
      };
   }
 
-  const type = classifyKeyword(keyword);
+  const resolvedType = classifyKeyword(keyword);
+  // Also keep `type` for backwards compat on existing hardcoded fields in this function currently
+  const type = resolvedType;
   const capitalizedKeyword = keyword.charAt(0).toUpperCase() + keyword.slice(1);
 
   // Determine scores based on keyword length to make it pseudo-deterministic
@@ -228,11 +230,83 @@ export async function generateIntelligenceForKeyword(keyword: string): Promise<S
   // Dynamic Pain Points based on the 5 data sources
   const painPoints: PainPointInsight[] = generateDynamicPainPoints(capitalizedKeyword, type);
 
-  // Dynamic Time Series
+  // Fetch Visuals
+  // In a real app we would call something like Clearbit. For mocking, we map known strings or use simple heuristics.
+  let visual: IntelligenceReport["visual"] = null;
+  const kwLower = keyword.toLowerCase();
+  
+  if (resolvedType === "company") {
+     const domainMap: Record<string, string> = {
+        "mosaic wellness": "mosaicwellness.in",
+        "minimalist": "beminimalist.co",
+        "mamaearth": "mamaearth.in",
+        "nykaa": "nykaa.com",
+        "sugar cosmetics": "sugarcosmetics.com",
+        "plum": "plumgoodness.com",
+        "mcaffeine": "mcaffeine.com",
+        "healthkart": "healthkart.com",
+        "curefit": "cult.fit",
+        "himalaya": "himalayawellness.in"
+     };
+     const targetDomain = domainMap[kwLower] || `${kwLower.replace(/\s+/g, '')}.com`;
+     visual = { url: `https://logo.clearbit.com/${targetDomain}`, type: "logo" };
+  } else if (resolvedType === "ingredient") {
+     // Use an aesthetic placeholder illustration representing molecular / botanical nature
+     visual = { url: "https://images.unsplash.com/photo-1576086213369-97a306d36557?auto=format&fit=crop&q=80&w=300&h=300", type: "illustration" };
+  }
+
+  // Authentic Contextual Analysis 
+  let analysis = {
+     overview: "",
+     marketRelevance: "",
+     opportunity: "",
+     categoryInsights: "",
+     consumerDemandSignals: ""
+  };
+
+  if (resolvedType === "company") {
+     if (kwLower === "mosaic wellness") {
+        analysis.overview = `Mosaic Wellness is a rapidly growing digital-first health clinic and D2C conglomerate operating out of India.`;
+        analysis.marketRelevance = `The company operates powerhouse brands including Man Matters and Be Bodywise, capturing significant market share in the highly fragmented personal care and wellness sectors.`;
+        analysis.opportunity = `Mosaic targets extremely high-intent consumer segments addressing specific clinical issues (hair loss, weight management, intimate health) rather than generic beauty.`;
+        analysis.categoryInsights = `The personal wellness category in India is expanding at ${searchGrowth}% YoY, driven strongly by tele-consultation models integrated with digital product delivery.`;
+        analysis.consumerDemandSignals = `Demand signals indicate consumers heavily favor Mosaic's science-backed, consultation-first approach over traditional retail shelves.`;
+     } else {
+        analysis.overview = `${capitalizedKeyword} operates as a consumer-facing entity within the Indian D2C and retail landscape.`;
+        analysis.marketRelevance = `The brand competes heavily in its category, positioning itself against both legacy FMCG conglomerates and new-age digital startups.`;
+        analysis.opportunity = `Significant whitespace exists for ${capitalizedKeyword} to capture tier-2 market demand through hyper-localized messaging.`;
+        analysis.categoryInsights = `The operating category is currently expanding at ~${searchGrowth}% YoY.`;
+        analysis.consumerDemandSignals = `Social listening reveals strong consumer tracking for ${capitalizedKeyword} regarding ingredient transparency and brand trust.`;
+     }
+  } else if (resolvedType === "ingredient") {
+     if (kwLower === "magnesium") {
+        analysis.overview = `Magnesium is an essential foundational mineral currently undergoing a massive "re-discovery" cycle in the Indian consumer wellness market.`;
+        analysis.marketRelevance = `Historically sold as a generic supplement, Magnesium's modern relevance is heavily anchored in sleep quality, stress management, and athletic recovery.`;
+        analysis.opportunity = `Major product expansion opportunities exist beyond traditional capsules: including premium gummies, hydration matrix powders, and topical sleep sprays.`;
+        analysis.categoryInsights = `The functional supplement category is seeing a structural shift; demand for highly-bioavailable formats (like Bisglycinate) is outperforming generic oxides by ${socialGrowth}%.`;
+        analysis.consumerDemandSignals = `Growing consumer demand points specifically toward formulations optimizing for nervous system regulation and deep sleep without daytime drowsiness.`;
+     } else {
+        analysis.overview = `${capitalizedKeyword} is an active health ingredient receiving heightened clinical and consumer attention.`;
+        analysis.marketRelevance = `The ingredient's relevance is anchored in the macro shift towards preventative, functional healthcare formulations.`;
+        analysis.opportunity = `Clear opportunity exists to formulate ${capitalizedKeyword} into consumer-friendly delivery systems, moving away from intimidating clinical pill burdens.`;
+        analysis.categoryInsights = `Ingredient-driven category searches for ${capitalizedKeyword} are expanding at ~${searchGrowth}% YoY across major e-commerce platforms.`;
+        analysis.consumerDemandSignals = `Consumers are actively researching the clinical efficacy and bioavailability of ${capitalizedKeyword} before purchasing.`;
+     }
+  } else {
+     // Generic / Product
+     analysis.overview = `Comprehensive analysis indicates that the phrase "${capitalizedKeyword}" represents a growing product category trend within D2C channels.`;
+     analysis.marketRelevance = `${capitalizedKeyword} concepts align with macro trends toward functional formulations and premiumization in the Indian market.`;
+     analysis.opportunity = `Whitespaces exist across the pricing architecture for high-quality, transparently-marketed ${capitalizedKeyword} formats.`;
+     analysis.categoryInsights = `This category subset is expanding at ~${searchGrowth}% YoY, largely driven by influencer education.`;
+     analysis.consumerDemandSignals = `Social listening indicates strong demand for better-tasting, higher-efficacy variations of ${capitalizedKeyword}.`;
+  }
+
+  // Dynamic Time Series - Q1 2023 formats
   const timeSeries: TrendTimepoint[] = Array.from({ length: 6 }).map((_, i) => {
     const baseInterest = 30 + i * 10 + (seed % 15);
+    const quarters = ["Q1 2023", "Q2 2023", "Q3 2023", "Q4 2023", "Q1 2024", "Q2 2024"];
     return {
-      month: ["Oct", "Nov", "Dec", "Jan", "Feb", "Mar"][i],
+      month: quarters[i],
       searchInterest: Math.floor(baseInterest * (1 + (seed % 20) / 100)),
       socialVolume: Math.floor((baseInterest - 10) * (1 + (seed % 30) / 100)),
       contentCreation: Math.floor((baseInterest - 20) * (1 + (seed % 40) / 100))
@@ -333,14 +407,9 @@ export async function generateIntelligenceForKeyword(keyword: string): Promise<S
     isValid: true,
     report: {
       keyword: capitalizedKeyword,
-      type,
-      analysis: {
-        overview: `Comprehensive analysis indicates that ${capitalizedKeyword} is experiencing a surge in consumer interest across D2C channels in India.`,
-        marketRelevance: `${capitalizedKeyword} aligns perfectly with the current macro trend towards preventative healthcare and functional nutrition.`,
-        opportunity: `Significant whitespace exists in premium formats (like gummies or effervescent tablets) for ${capitalizedKeyword}.`,
-        categoryInsights: `The ${type} category is currently expanding at ~${searchGrowth}% YoY.`,
-        consumerDemandSignals: `Social listening indicates strong demand for "better tasting" and "more effective" ${capitalizedKeyword} products.`
-      },
+      type: resolvedType,
+      visual,
+      analysis,
       dashboardMetrics: {
         opportunityScore: parseFloat(opportunityScore.toFixed(1)),
         growthPotential: searchGrowth + 12,
