@@ -116,7 +116,7 @@ export function HeroSection({ onExploreRadar, onShowBriefs }: HeroProps) {
         </motion.div>
 
         <motion.div
-          className="flex flex-wrap items-center gap-2"
+          className="relative z-20 flex flex-wrap items-center gap-2"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.6, duration: 1 }}
@@ -132,7 +132,7 @@ export function HeroSection({ onExploreRadar, onShowBriefs }: HeroProps) {
                 setSearchQuery(trend);
                 router.push(`/search?q=${encodeURIComponent(trend)}`);
               }}
-              className="rounded-md bg-slate-100 px-2 py-1 text-[10px] font-bold tracking-wide text-slate-600 transition-colors hover:bg-slate-200 hover:text-black"
+              className="cursor-pointer rounded-md bg-slate-100 px-2 py-1 text-[10px] font-bold tracking-wide text-slate-600 transition-colors hover:bg-slate-200 hover:text-black hover:scale-105 active:scale-95"
             >
               {trend}
             </button>
