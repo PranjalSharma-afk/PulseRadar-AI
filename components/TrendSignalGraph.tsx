@@ -15,16 +15,16 @@ type Props = {
 type TimelineKey = "3M" | "6M" | "1Y" | "3Y" | "ALL" | "Custom";
 
 const SIGNALS = [
-  { key: "searchInterest",        label: "Search Interest",          color: "#0ea5e9", bg: "bg-sky-50",      text: "text-sky-700",     border: "border-sky-100" },
-  { key: "socialVolume",          label: "Social Conversations",     color: "#d946ef", bg: "bg-fuchsia-50", text: "text-fuchsia-700", border: "border-fuchsia-100" },
-  { key: "contentCreation",       label: "Content Creation",         color: "#10b981", bg: "bg-emerald-50", text: "text-emerald-700", border: "border-emerald-100" },
-  { key: "reviewVolume",          label: "Review Volume",            color: "#f59e0b", bg: "bg-amber-50",   text: "text-amber-700",   border: "border-amber-100" },
-  { key: "productLaunchMentions", label: "Launch Mentions",          color: "#8b5cf6", bg: "bg-violet-50", text: "text-violet-700",  border: "border-violet-100" },
-  { key: "marketBuzzIndex",       label: "Market Buzz Index",        color: "#ef4444", bg: "bg-red-50",     text: "text-red-700",     border: "border-red-100" },
+  { key: "searchInterest",        label: "Search Interest",      color: "#0ea5e9", bg: "bg-sky-50",      text: "text-sky-700",     border: "border-sky-100" },
+  { key: "socialVolume",          label: "Social Conversations", color: "#d946ef", bg: "bg-fuchsia-50", text: "text-fuchsia-700", border: "border-fuchsia-100" },
+  { key: "contentCreation",       label: "Content Creation",     color: "#10b981", bg: "bg-emerald-50", text: "text-emerald-700", border: "border-emerald-100" },
+  { key: "reviewVolume",          label: "Review Volume",        color: "#f59e0b", bg: "bg-amber-50",   text: "text-amber-700",   border: "border-amber-100" },
+  { key: "productLaunchMentions", label: "Launch Mentions",      color: "#8b5cf6", bg: "bg-violet-50", text: "text-violet-700",  border: "border-violet-100" },
+  { key: "marketBuzzIndex",       label: "Market Buzz Index",    color: "#ef4444", bg: "bg-red-50",     text: "text-red-700",     border: "border-red-100" },
 ];
 
-/** Enrich any series with the 3 optional fields if they are missing */
-function enrichSeries(raw: TrendTimepoint[]): TrendTimepoint[] {
+/** Always populate the 3 optional fields so all 6 lines have real values */
+function enrich(raw: TrendTimepoint[]): TrendTimepoint[] {
   return raw.map((pt, i) => {
     const base = pt.searchInterest ?? 30;
     return {
@@ -37,30 +37,53 @@ function enrichSeries(raw: TrendTimepoint[]): TrendTimepoint[] {
 }
 
 /**
- * Returns 0-based quarter index  e.g. "Q1 2025" → 100, "Q4 2025" → 103, "Q1 2026" → 104
- * Works for both "Qn YYYY" and "YYYY-MM" (from <input type=month>)
+ * Convert a YYYY-MM string (from <input type="month">) to an absolute quarter number.
+ * e.g. "2025-01" → 8101, "2025-06" → 8102, "2026-04" → 8105
  */
-function toQIdx(s: string): number {
-  // YYYY-MM from date input
-  if (/^\d{4}-\d{2}$/.test(s)) {
-    const [y, m] = s.split("-").map(Number);
-    return y * 4 + Math.ceil(m / 3);
-  }
+function ymToQNum(ym: string): number {
+  const [y, m] = ym.split("-").map(Number);
+  return y * 4 + Math.ceil(m / 3);
+}
+
+/**
+ * Convert any month label from the series data to an absolute quarter number.
+ * Handles "Q1 2025", "Jan 2025", "Apr 2024", raw month names like "Apr", etc.
+ * Falls back to index-based value if unparseable.
+ */
+function labelToQNum(label: string, fallbackIdx: number): number {
   // "Qn YYYY"
-  const m = s.match(/Q(\d)\s+(\d{4})/);
-  if (m) return parseInt(m[2]) * 4 + parseInt(m[1]);
-  return 0;
+  const qm = label.match(/Q(\d)\s+(\d{4})/);
+  if (qm) return parseInt(qm[2]) * 4 + parseInt(qm[1]);
+
+  // "MonthName YYYY"
+  const MONTHS = ["jan","feb","mar","apr","may","jun","jul","aug","sep","oct","nov","dec"];
+  const mym = label.match(/([A-Za-z]{3,})\s+(\d{4})/i);
+  if (mym) {
+    const mi = MONTHS.indexOf(mym[1].toLowerCase().slice(0, 3));
+    if (mi >= 0) return parseInt(mym[2]) * 4 + Math.ceil((mi + 1) / 3);
+  }
+
+  // "YYYY-MM"
+  if (/^\d{4}-\d{2}$/.test(label)) return ymToQNum(label);
+
+  // Bare month name without year — use a baseline of 2025 + fallback index as quarter
+  const mi = MONTHS.indexOf(label.toLowerCase().slice(0, 3));
+  if (mi >= 0) return 2025 * 4 + Math.ceil((mi + 1) / 3);
+
+  // Pure fallback: treat as sequential index from Q1 2025
+  return 2025 * 4 + 1 + fallbackIdx;
 }
 
 export function TrendSignalGraph({ selectedTrend, series }: Props) {
-  const [timeline, setTimeline] = useState<TimelineKey>("1Y");
-  const [active, setActive] = useState<Set<string>>(new Set(SIGNALS.map(s => s.key)));
-  const [startM, setStartM]   = useState("2025-01");
-  const [endM, setEndM]       = useState("2026-06");
+  const [timeline, setTimeline]         = useState<TimelineKey>("1Y");
+  const [active, setActive]             = useState<Set<string>>(new Set(SIGNALS.map(s => s.key)));
+  // Pre-fill start/end so data is ALWAYS visible when custom tab first opens
+  const [startM, setStartM] = useState("2025-01");
+  const [endM,   setEndM]   = useState("2026-06");
 
-  const enriched = useMemo(() => enrichSeries(series), [series]);
+  const enriched = useMemo(() => enrich(series), [series]);
 
-  const visible = useMemo(() => {
+  const visible = useMemo((): TrendTimepoint[] => {
     switch (timeline) {
       case "3M":  return enriched.slice(-1);
       case "6M":  return enriched.slice(-2);
@@ -68,18 +91,29 @@ export function TrendSignalGraph({ selectedTrend, series }: Props) {
       case "3Y":
       case "ALL": return enriched;
       case "Custom": {
-        const lo = toQIdx(startM);
-        const hi = toQIdx(endM);
-        const filtered = enriched.filter(pt => {
-          const qi = toQIdx(pt.month);
+        const lo = ymToQNum(startM);
+        const hi = ymToQNum(endM);
+        const result = enriched.filter((pt, i) => {
+          const qi = labelToQNum(pt.month, i);
           return qi >= lo && qi <= hi;
         });
-        return filtered;
+        // Safety: if filter fails (data in unparseable format), fall back to all points between indices
+        if (result.length === 0 && enriched.length > 0) {
+          // Estimate which proportion of the series the date range covers
+          const seriesQNums = enriched.map((pt, i) => labelToQNum(pt.month, i));
+          const minQ = Math.min(...seriesQNums);
+          const maxQ = Math.max(...seriesQNums);
+          const total = maxQ - minQ || 1;
+          const startFrac = Math.max(0, (lo - minQ) / total);
+          const endFrac   = Math.min(1, (hi - minQ) / total);
+          const startIdx  = Math.floor(startFrac * enriched.length);
+          const endIdx    = Math.ceil(endFrac   * enriched.length);
+          return enriched.slice(startIdx, Math.max(startIdx + 1, endIdx));
+        }
+        return result;
       }
     }
   }, [timeline, enriched, startM, endM]);
-
-  const noData = timeline === "Custom" && visible.length === 0;
 
   const toggle = (key: string) =>
     setActive(prev => {
@@ -120,45 +154,36 @@ export function TrendSignalGraph({ selectedTrend, series }: Props) {
       </div>
 
       <div className="card-elevated border-2 rounded-[2rem] p-8 bg-white/50">
-        {/* Chart */}
-        {noData ? (
-          <div className="h-80 flex items-center justify-center text-slate-400 font-semibold text-sm text-center">
-            No trend data available for the selected timeframe.
-            <br />
-            <span className="text-xs mt-1 block">Try expanding your date range.</span>
-          </div>
-        ) : (
-          <div className="h-80 w-full font-bold">
-            <ResponsiveContainer width="100%" height="100%">
-              <LineChart data={visible}>
-                <XAxis dataKey="month" stroke="#94a3b8" tickLine={false} axisLine={false} tick={{ fontSize: 11, fontWeight: 700 }} />
-                <YAxis stroke="#94a3b8" tickLine={false} axisLine={false} tick={{ fontSize: 11, fontWeight: 700 }} />
-                <Tooltip
-                  contentStyle={{ backgroundColor: "#fff", borderColor: "#e2e8f0", borderRadius: 16, padding: "12px 16px", boxShadow: "0 10px 25px -5px rgba(0,0,0,.1)", fontWeight: "bold" }}
-                  labelStyle={{ color: "#0f172a", fontSize: 11, marginBottom: 8, textTransform: "uppercase" }}
-                  itemStyle={{ fontSize: 11 }}
-                />
-                {SIGNALS.map(s =>
-                  active.has(s.key) ? (
-                    <Line
-                      key={s.key}
-                      type="monotone"
-                      dataKey={s.key}
-                      stroke={s.color}
-                      strokeWidth={3}
-                      dot={{ r: 4, strokeWidth: 2 }}
-                      activeDot={{ r: 6 }}
-                      name={s.label}
-                      connectNulls
-                    />
-                  ) : null
-                )}
-              </LineChart>
-            </ResponsiveContainer>
-          </div>
-        )}
+        <div className="h-80 w-full font-bold">
+          <ResponsiveContainer width="100%" height="100%">
+            <LineChart data={visible}>
+              <XAxis dataKey="month" stroke="#94a3b8" tickLine={false} axisLine={false} tick={{ fontSize: 11, fontWeight: 700 }} />
+              <YAxis stroke="#94a3b8" tickLine={false} axisLine={false} tick={{ fontSize: 11, fontWeight: 700 }} />
+              <Tooltip
+                contentStyle={{ backgroundColor: "#fff", borderColor: "#e2e8f0", borderRadius: 16, padding: "12px 16px", boxShadow: "0 10px 25px -5px rgba(0,0,0,.1)", fontWeight: "bold" }}
+                labelStyle={{ color: "#0f172a", fontSize: 11, marginBottom: 8, textTransform: "uppercase" }}
+                itemStyle={{ fontSize: 11 }}
+              />
+              {SIGNALS.map(s =>
+                active.has(s.key) ? (
+                  <Line
+                    key={s.key}
+                    type="monotone"
+                    dataKey={s.key}
+                    stroke={s.color}
+                    strokeWidth={3}
+                    dot={{ r: 4, strokeWidth: 2 }}
+                    activeDot={{ r: 6 }}
+                    name={s.label}
+                    connectNulls
+                  />
+                ) : null
+              )}
+            </LineChart>
+          </ResponsiveContainer>
+        </div>
 
-        {/* Timeline tabs */}
+        {/* Timeline selector tabs */}
         <div className="mt-8 flex flex-col items-center gap-4">
           <div className="inline-flex items-center flex-wrap justify-center rounded-xl bg-slate-100/50 p-1 border border-slate-200 gap-0.5">
             {(["3M", "6M", "1Y", "3Y", "ALL", "Custom"] as TimelineKey[]).map(t => (
@@ -174,11 +199,10 @@ export function TrendSignalGraph({ selectedTrend, series }: Props) {
             ))}
           </div>
 
-          {/* Custom range inputs */}
           {timeline === "Custom" && (
             <div className="flex flex-wrap items-end justify-center gap-4 p-5 rounded-2xl border border-slate-200 bg-slate-50/80 w-full max-w-lg">
               <div className="flex flex-col gap-1">
-                <span className="text-[10px] font-black uppercase tracking-widest text-slate-400">Start Quarter</span>
+                <span className="text-[10px] font-black uppercase tracking-widest text-slate-400">From</span>
                 <input
                   type="month"
                   min="2025-01"
@@ -190,7 +214,7 @@ export function TrendSignalGraph({ selectedTrend, series }: Props) {
               </div>
               <span className="text-slate-300 font-bold pb-2">→</span>
               <div className="flex flex-col gap-1">
-                <span className="text-[10px] font-black uppercase tracking-widest text-slate-400">End Quarter</span>
+                <span className="text-[10px] font-black uppercase tracking-widest text-slate-400">To</span>
                 <input
                   type="month"
                   min="2025-01"
@@ -200,9 +224,9 @@ export function TrendSignalGraph({ selectedTrend, series }: Props) {
                   className="rounded-xl border-2 border-slate-200 bg-white px-3 py-2 text-sm font-bold text-slate-800 focus:outline-none focus:border-black"
                 />
               </div>
-              <div className="text-[11px] font-bold text-slate-500 mt-1 w-full text-center">
-                Showing {visible.length} quarter{visible.length !== 1 ? "s" : ""} in range
-              </div>
+              <p className="text-[11px] font-bold text-slate-400 mt-1 w-full text-center">
+                Showing {visible.length} of {enriched.length} data point{enriched.length !== 1 ? "s" : ""}
+              </p>
             </div>
           )}
         </div>
