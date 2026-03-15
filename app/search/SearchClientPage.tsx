@@ -12,6 +12,7 @@ import { TrendSignalGraph } from "@/components/TrendSignalGraph";
 import { TrendScoringFramework } from "@/components/TrendScoringFramework";
 import { CompetitorIntelligence } from "@/components/CompetitorIntelligence";
 import { TrendMomentumRadar } from "@/components/TrendMomentumRadar";
+import { StartupOpportunityGenerator } from "@/components/StartupOpportunityGenerator";
 
 export function SearchClientPage({ result, query }: { result: SearchResult; query: string }) {
   if (!result.isValid) {
@@ -255,6 +256,13 @@ export function SearchClientPage({ result, query }: { result: SearchResult; quer
           <div className="border-t border-slate-100 mt-10">
             <CompetitorIntelligence competitors={report.competitors} keyword={report.keyword} />
           </div>
+
+          {/* 8. Startup Opportunity Generator */}
+          {report.opportunities && report.opportunities.length > 0 && (
+            <div className="border-t border-slate-100 mt-10">
+              <StartupOpportunityGenerator opportunities={report.opportunities} />
+            </div>
+          )}
 
         </article>
 

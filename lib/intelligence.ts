@@ -1,4 +1,4 @@
-import { IntelligenceReport, CompetitorProfile, TrendSignal, TrendTimepoint, PainPointInsight, TrendConcept, SearchResult } from "./types";
+import { IntelligenceReport, CompetitorProfile, TrendSignal, TrendTimepoint, PainPointInsight, TrendConcept, SearchResult, StartupOpportunity } from "./types";
 
 /**
  * Heuristic to guess the intent of the keyword.
@@ -443,6 +443,7 @@ export async function generateIntelligenceForKeyword(keyword: string): Promise<S
 
   // Trend momentum concepts dynamically tailored using domain constrained opportunity libraries
   let concepts: TrendConcept[] = [];
+  let opportunities: StartupOpportunity[] = [];
   if (isSkinType) {
      concepts = [
       { id: "c1", name: `${capitalizedKeyword} Peeling Solutions`, explanation: `High-strength AHA/BHA exfoliating treatments for targeted hyperpigmentation.`, demand: 85, growth: 92, targetSegment: "Acne-prone, Exfoliation Seekers", opportunityLevel: "High" },
@@ -450,6 +451,12 @@ export async function generateIntelligenceForKeyword(keyword: string): Promise<S
       { id: "c3", name: `${capitalizedKeyword} Body Lotions`, explanation: `Daily utility moisturizing lotions infused with active percentages.`, demand: 90, growth: 25, targetSegment: "General Skincare", opportunityLevel: "Low" },
       { id: "c4", name: `${capitalizedKeyword} Lip Treatments`, explanation: `Specialized active balms treating lip discoloration and extreme dryness.`, demand: 20, growth: 30, targetSegment: "Aesthetic Consumers", opportunityLevel: "Medium" },
       { id: "c5", name: `${capitalizedKeyword} Overnight Masks`, explanation: `Rich leave-on nocturnal treatments designed for deep penetration.`, demand: 45, growth: 75, targetSegment: "Anti-aging", opportunityLevel: "Medium" }
+    ];
+
+    opportunities = [
+      { id: "o1", conceptName: `${capitalizedKeyword} Post-Procedure Barrier Therapy`, targetConsumer: "Dermatology Patients & Sensitive Skin", problemSolved: "Clinical aftercare products are often too heavy or lack active soothing agents.", differentiationAngle: "Formulated specifically with clinically-tested peptide complexes to accelerate barrier repair post-laser." },
+      { id: "o2", conceptName: `${capitalizedKeyword} Scalp Hydration Serums`, targetConsumer: "Individuals with dry, flaky scalps", problemSolved: "Most scalp products are wash-off; few exist as leave-on protective barriers.", differentiationAngle: "Applying face-grade restorative ceramides in an ultra-lightweight, non-greasy scalp serum." },
+      { id: "o3", conceptName: `${capitalizedKeyword} Tinted Adaptive Sunscreen`, targetConsumer: "Daily skincare minimalists", problemSolved: "Layering multiple products (moisturizer, tint, SPF) leads to pillage and clogged pores.", differentiationAngle: "A single-step formula combining high SPF, encapsulated tint, and deep barrier repair." }
     ];
   } else {
     // Supplements / Health format library filters out invalid things like "Coffee"
@@ -459,6 +466,12 @@ export async function generateIntelligenceForKeyword(keyword: string): Promise<S
       { id: "c3", name: `${capitalizedKeyword} Standard Capsules`, explanation: `Generic single-ingredient ${capitalizedKeyword} delivery payload via standardized gelatin or veg capsules.`, demand: 90, growth: 25, targetSegment: "General Wellness", opportunityLevel: "Low" },
       { id: "c4", name: `${capitalizedKeyword} Liquid Extracts`, explanation: `Sublingual drops formulated for rapid bloodstream absorption and high bioavailability.`, demand: 20, growth: 30, targetSegment: "Biohackers, Fast Absorption", opportunityLevel: "Medium" },
       { id: "c5", name: `${capitalizedKeyword} Stress Support Blends`, explanation: `Multi-ingredient functional blends primarily anchored by clinical doses of ${capitalizedKeyword}.`, demand: 55, growth: 75, targetSegment: "Anxiety, Mental Health", opportunityLevel: "Medium" }
+    ];
+
+    opportunities = [
+      { id: "o1", conceptName: `${capitalizedKeyword} Sleep & Rest Elixir`, targetConsumer: "Stressed Urban Professionals", problemSolved: "Pills are difficult for some to swallow right before bed.", differentiationAngle: "A fast-absorbing, night-time sublingual droplet system maximizing bioavailability." },
+      { id: "o2", conceptName: `${capitalizedKeyword} Fortified Electrolyte Mix`, targetConsumer: "Endurance Athletes", problemSolved: "Standard hydration mixes lack adequate muscle relaxation minerals.", differentiationAngle: "Combines high-sodium rapid rehydration with massive muscular-relaxation doses of ${capitalizedKeyword}." },
+      { id: "o3", conceptName: `${capitalizedKeyword} Focus & Calm Bars`, targetConsumer: "Students & Desk Workers", problemSolved: "Most snack bars spike blood sugar causing afternoon brain fog.", differentiationAngle: "A high-protein savory format heavily dosed with ${capitalizedKeyword} to combat cortisol spikes." }
     ];
   }
 
@@ -477,6 +490,7 @@ export async function generateIntelligenceForKeyword(keyword: string): Promise<S
         demandSignals: opportunityScore > 8 ? "Very Strong" : "Strong"
       },
       competitors,
+      opportunities,
       painPoints,
       trendScore,
       concepts,

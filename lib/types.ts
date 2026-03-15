@@ -58,6 +58,14 @@ export type TrendConcept = {
   opportunityLevel: "High" | "Medium" | "Low";
 };
 
+export type StartupOpportunity = {
+  id: string;
+  conceptName: string;
+  targetConsumer: string;
+  problemSolved: string;
+  differentiationAngle: string;
+};
+
 export type IntelligenceReport = {
   keyword: string;
   type: "company" | "product" | "ingredient" | "unknown";
@@ -88,6 +96,7 @@ export type IntelligenceReport = {
 
   // Feature 3
   competitors: CompetitorProfile[];
+  opportunities: StartupOpportunity[];
 
   // Feature 4
   painPoints: PainPointInsight[];
