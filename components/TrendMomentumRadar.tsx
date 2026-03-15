@@ -24,7 +24,8 @@ export function TrendMomentumRadar({ concepts }: { concepts: TrendConcept[] }) {
       return (
         <div className="rounded-2xl border border-slate-200 bg-white/95 p-4 shadow-[0_10px_25px_-5px_rgba(0,0,0,0.1),0_8px_10px_-6px_rgba(0,0,0,0.1)] backdrop-blur-md max-w-[280px]">
           <p className="text-sm font-extrabold text-slate-900 leading-tight mb-1">{data.name}</p>
-          <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-3">{data.targetSegment}</p>
+          <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-2">{data.targetSegment}</p>
+          <p className="text-xs text-slate-600 font-medium mb-4 leading-snug">{data.explanation}</p>
           
           <div className="grid grid-cols-2 gap-3 mb-3">
              <div className="rounded-xl border border-slate-100 bg-slate-50 p-2">

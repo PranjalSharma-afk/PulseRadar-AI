@@ -320,10 +320,10 @@ export async function generateIntelligenceForKeyword(keyword: string): Promise<S
      analysis.consumerDemandSignals = `Social listening indicates strong demand for better-tasting, higher-efficacy variations of ${capitalizedKeyword}.`;
   }
 
-  // Dynamic Time Series - Q1 2023 formats
+  // Dynamic Time Series - Q1 2025 formats
   const timeSeries: TrendTimepoint[] = Array.from({ length: 6 }).map((_, i) => {
     const baseInterest = 30 + i * 10 + (seed % 15);
-    const quarters = ["Q1 2023", "Q2 2023", "Q3 2023", "Q4 2023", "Q1 2024", "Q2 2024"];
+    const quarters = ["Q1 2025", "Q2 2025", "Q3 2025", "Q4 2025", "Q1 2026", "Q2 2026"];
     return {
       month: quarters[i],
       searchInterest: Math.floor(baseInterest * (1 + (seed % 20) / 100)),
@@ -441,24 +441,24 @@ export async function generateIntelligenceForKeyword(keyword: string): Promise<S
     opportunityInsight: `Strong consumer demand signals for ${capitalizedKeyword} with whitespace in premium, highly-bioavailable formats.`
   };
 
-  // Trend momentum concepts dynamically tailored
+  // Trend momentum concepts dynamically tailored using domain constrained opportunity libraries
   let concepts: TrendConcept[] = [];
   if (isSkinType) {
      concepts = [
-      { id: "c1", name: `${capitalizedKeyword} Peeling Solutions`, demand: 85, growth: 92, targetSegment: "Acne-prone, Exfoliation Seekers", opportunityLevel: "High" },
-      { id: "c2", name: `${capitalizedKeyword} Barrier Repair Creams`, demand: 60, growth: 88, targetSegment: "Dry/Sensitive Skin", opportunityLevel: "High" },
-      { id: "c3", name: `${capitalizedKeyword} Body Lotions`, demand: 90, growth: 25, targetSegment: "General Skincare", opportunityLevel: "Low" },
-      { id: "c4", name: `${capitalizedKeyword} Lip Treatments`, demand: 20, growth: 30, targetSegment: "Aesthetic Consumers", opportunityLevel: "Medium" },
-      { id: "c5", name: `${capitalizedKeyword} Overnight Masks`, demand: 45, growth: 75, targetSegment: "Anti-aging", opportunityLevel: "Medium" }
+      { id: "c1", name: `${capitalizedKeyword} Peeling Solutions`, explanation: `High-strength AHA/BHA exfoliating treatments for targeted hyperpigmentation.`, demand: 85, growth: 92, targetSegment: "Acne-prone, Exfoliation Seekers", opportunityLevel: "High" },
+      { id: "c2", name: `${capitalizedKeyword} Barrier Repair Creams`, explanation: `Ceramide-dense soothing creams targeting damaged skin barriers.`, demand: 60, growth: 88, targetSegment: "Dry/Sensitive Skin", opportunityLevel: "High" },
+      { id: "c3", name: `${capitalizedKeyword} Body Lotions`, explanation: `Daily utility moisturizing lotions infused with active percentages.`, demand: 90, growth: 25, targetSegment: "General Skincare", opportunityLevel: "Low" },
+      { id: "c4", name: `${capitalizedKeyword} Lip Treatments`, explanation: `Specialized active balms treating lip discoloration and extreme dryness.`, demand: 20, growth: 30, targetSegment: "Aesthetic Consumers", opportunityLevel: "Medium" },
+      { id: "c5", name: `${capitalizedKeyword} Overnight Masks`, explanation: `Rich leave-on nocturnal treatments designed for deep penetration.`, demand: 45, growth: 75, targetSegment: "Anti-aging", opportunityLevel: "Medium" }
     ];
   } else {
-    // Supplements / Health
+    // Supplements / Health format library filters out invalid things like "Coffee"
     concepts = [
-      { id: "c1", name: `${capitalizedKeyword} Sleep Gummies`, demand: 85, growth: 92, targetSegment: "Insomniacs, Stressed Professionals", opportunityLevel: "High" },
-      { id: "c2", name: `${capitalizedKeyword} Hydration Mix`, demand: 35, growth: 88, targetSegment: "Athletes, Fitness Enthusiasts", opportunityLevel: "High" },
-      { id: "c3", name: `${capitalizedKeyword} Standard Capsules`, demand: 90, growth: 25, targetSegment: "General Wellness", opportunityLevel: "Low" },
-      { id: "c4", name: `${capitalizedKeyword} Pet Soft Chews`, demand: 20, growth: 30, targetSegment: "Pet Owners", opportunityLevel: "Medium" },
-      { id: "c5", name: `${capitalizedKeyword} Coffee Alternative`, demand: 45, growth: 75, targetSegment: "Biohackers, Alternative Health", opportunityLevel: "Medium" }
+      { id: "c1", name: `${capitalizedKeyword} Sleep Gummies`, explanation: `Adaptogenic supplement combining ${capitalizedKeyword} with sleep support complexes inside a gummy format.`, demand: 85, growth: 92, targetSegment: "Insomniacs, Stressed Professionals", opportunityLevel: "High" },
+      { id: "c2", name: `${capitalizedKeyword} Hydration Powders`, explanation: `Effervescent or powdered electrolytes heavily fortified with ${capitalizedKeyword}.`, demand: 35, growth: 88, targetSegment: "Athletes, Fitness Enthusiasts", opportunityLevel: "High" },
+      { id: "c3", name: `${capitalizedKeyword} Standard Capsules`, explanation: `Generic single-ingredient ${capitalizedKeyword} delivery payload via standardized gelatin or veg capsules.`, demand: 90, growth: 25, targetSegment: "General Wellness", opportunityLevel: "Low" },
+      { id: "c4", name: `${capitalizedKeyword} Liquid Extracts`, explanation: `Sublingual drops formulated for rapid bloodstream absorption and high bioavailability.`, demand: 20, growth: 30, targetSegment: "Biohackers, Fast Absorption", opportunityLevel: "Medium" },
+      { id: "c5", name: `${capitalizedKeyword} Stress Support Blends`, explanation: `Multi-ingredient functional blends primarily anchored by clinical doses of ${capitalizedKeyword}.`, demand: 55, growth: 75, targetSegment: "Anxiety, Mental Health", opportunityLevel: "Medium" }
     ];
   }
 

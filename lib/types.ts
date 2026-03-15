@@ -51,6 +51,7 @@ export type CompetitorProfile = {
 export type TrendConcept = {
   id: string;
   name: string;
+  explanation: string;
   demand: number; // X-axis (0-100)
   growth: number; // Y-axis (0-100)
   targetSegment: string;

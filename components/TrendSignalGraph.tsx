@@ -17,7 +17,7 @@ type Props = {
 };
 
 export function TrendSignalGraph({ selectedTrend, series }: Props) {
-  const [timeline, setTimeline] = useState<"3M" | "6M" | "1Y" | "3Y" | "ALL">("1Y");
+  const [timeline, setTimeline] = useState<"3M" | "6M" | "1Y" | "3Y" | "ALL" | "Custom Date Range">("1Y");
 
   // Determine how many data points to show based on timeline
   // The mock series currently has 6 quarters.
@@ -121,7 +121,7 @@ export function TrendSignalGraph({ selectedTrend, series }: Props) {
         {/* Timeline Selector Feature */}
         <div className="mt-8 flex justify-center">
            <div className="inline-flex items-center rounded-xl bg-slate-100/50 p-1 border border-slate-200">
-             {["3M", "6M", "1Y", "3Y", "ALL"].map((t) => (
+             {["3M", "6M", "1Y", "3Y", "ALL", "Custom Date Range"].map((t) => (
                <button
                  key={t}
                  onClick={() => setTimeline(t as any)}
